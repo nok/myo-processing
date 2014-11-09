@@ -68,7 +68,8 @@ Processing version:
 ## Usage
 
 - Run ```Guides/ Getting Started ...``` of **Myo Connect** to learn the different poses.
-- Import the library to Processing.
+- Install the library to Processing (see [Installation](#installation)).
+- Run the [example](#examples) and **have fun**.
 
 ### Basic Data-Access
 
@@ -136,19 +137,26 @@ void myoOnArmLost(Myo myo, long timestamp) {
 }
 
 void myoOnPose(Myo myo, long timestamp, Myo.Pose POSE) {
+  println("Sketch: myoOnPose");
   switch (POSE) {
   case REST:
+    println("Pose: REST");
     break;
   case FIST:
+    println("Pose: FIST");
     myo.vibrate();
     break;
   case FINGERS_SPREAD:
+    println("Pose: FINGERS_SPREAD");
     break;
   case THUMB_TO_PINKY:
+    println("Pose: THUMB_TO_PINKY");
     break;
   case WAVE_IN:
+    println("Pose: WAVE_IN");
     break;
   case WAVE_OUT:
+    println("Pose: WAVE_OUT");
     break;
   default:
     break;
@@ -173,7 +181,6 @@ void myoOnRssi(Myo myo, long timestamp, int rssi) {
 
 // ----------------------------------------------------------
 
-/*
 void myoOn(Myo.Event EVENT, Myo myo, long timestamp) {
   switch(EVENT) {
   case PAIR:
