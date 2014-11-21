@@ -23,7 +23,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.5b](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.6.0b](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **beta** implementation, so have a look at the [development branch](https://github.com/voidplus/myo-processing/tree/dev).
 
@@ -35,8 +35,8 @@ Unzip and put the extracted *MyoForProcessing* folder into the libraries folder 
 
 ## Dependencies
 
-- [Myo Connect v0.5.1](https://developer.thalmic.com/downloads)
-- [Myo Firmware v0.8.18](https://developer.thalmic.com/downloads)
+- [Myo Connect v0.6.0](https://developer.thalmic.com/downloads)
+- [Myo Firmware v1.0.3](https://developer.thalmic.com/downloads)
 
 
 ## Tested
@@ -52,7 +52,8 @@ Myo hardware device:
 
 Myo SDK version:
 
-- **Beta Release 5**
+- **0.6.0b**
+- **0.5.1b**
 
 Processing version:
 
@@ -111,8 +112,8 @@ void myoOnDisconnect(Myo myo, long timestamp) {
   println("Sketch: myoOnDisconnect");
 }
 
-void myoOnArmRecognized(Myo myo, long timestamp, Myo.Arm ARM) {
-  println("Sketch: myoOnArmRecognized");
+void myoOnArmSync(Myo myo, long timestamp, Myo.Arm ARM) {
+  println("Sketch: myoOnArmSync");
 
   switch (ARM) {
   case LEFT:
@@ -132,8 +133,8 @@ void myoOnArmRecognized(Myo myo, long timestamp, Myo.Arm ARM) {
   }
 }
 
-void myoOnArmLost(Myo myo, long timestamp) {
-  println("Sketch: myoOnArmLost");
+void myoOnArmUnsync(Myo myo, long timestamp) {
+  println("Sketch: myoOnArmUnsync");
 }
 
 void myoOnPose(Myo myo, long timestamp, Myo.Pose POSE) {
@@ -195,11 +196,11 @@ void myoOn(Myo.Event EVENT, Myo myo, long timestamp) {
   case DISCONNECT:
     println("myoOn DISCONNECT");
     break;
-  case ARM_RECOGNIZED:
-    println("myoOn ARM_RECOGNIZED");
+  case ARM_SYNC:
+    println("myoOn ARM_SYNC");
     break;
-  case ARM_LOST:
-    println("myoOn ARM_LOST");
+  case ARM_UNSYNC:
+    println("myoOn ARM_UNSYNC");
     break;
   case POSE:
     println("myoOn POSE");  

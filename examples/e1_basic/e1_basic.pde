@@ -56,8 +56,8 @@ void myoOnArmRecognized(Myo myo, long timestamp, Myo.Arm ARM) {
   }
 }
 
-void myoOnArmLost(Myo myo, long timestamp) {
-  println("Sketch: myoOnArmLost");
+void myoOnArmUnsync(Myo myo, long timestamp) {
+  println("Sketch: myoOnArmUnsync");
 }
 
 void myoOnPose(Myo myo, long timestamp, Myo.Pose POSE) {
@@ -119,11 +119,11 @@ void myoOn(Myo.Event EVENT, Myo myo, long timestamp) {
   case DISCONNECT:
     println("myoOn DISCONNECT");
     break;
-  case ARM_RECOGNIZED:
-    println("myoOn ARM_RECOGNIZED");
+  case ARM_SYNC:
+    println("myoOn ARM_SYNC");
     break;
-  case ARM_LOST:
-    println("myoOn ARM_LOST");
+  case ARM_UNSYNC:
+    println("myoOn ARM_UNSYNC");
     break;
   case POSE:
     println("myoOn POSE");  

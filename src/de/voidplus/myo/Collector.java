@@ -108,7 +108,7 @@ public class Collector implements DeviceListener {
 	}
 	
 	@Override
-	public void onArmRecognized(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
+	public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
 		if(arm != com.thalmic.myo.enums.Arm.ARM_UNKNOWN){
 			if(this.myo.arm.asRaw() != arm){
 				switch(arm){
@@ -123,7 +123,7 @@ public class Collector implements DeviceListener {
 					break;
 				}
 				
-				this.dispatchLocalEvent("myoOnArmRecognized", new Class[] {
+				this.dispatchLocalEvent("myoOnArmSync", new Class[] {
 					de.voidplus.myo.Myo.class,
 					long.class,
 					de.voidplus.myo.Myo.Arm.class
@@ -132,24 +132,24 @@ public class Collector implements DeviceListener {
 					timestamp,
 					this.myo.arm
 				}, 2);
-				this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ARM_RECOGNIZED, this.myo, timestamp);
+				this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ARM_SYNC, this.myo, timestamp);
 			}		
 		}
 	}	
 	
 	@Override
-	public void onArmLost(Myo myo, long timestamp) {
+	public void onArmUnsync(Myo myo, long timestamp) {
 		this.myo.arm = de.voidplus.myo.Myo.Arm.UNKNOWN;
 		this.myo.pose = de.voidplus.myo.Myo.Pose.UNKNOWN;
 		
-		this.dispatchLocalEvent("myoOnArmLost", new Class[] {
+		this.dispatchLocalEvent("myoOnArmUnsync", new Class[] {
 			de.voidplus.myo.Myo.class,
 			long.class
 		}, new Object[] {
 			this.myo,
 			timestamp
 		});
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ARM_LOST, this.myo, timestamp);
+		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ARM_UNSYNC, this.myo, timestamp);
 	}
 	
 	@Override

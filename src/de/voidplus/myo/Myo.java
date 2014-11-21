@@ -8,7 +8,7 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.5b";
+	private final static String VERSION = "0.6.0b";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
 	
 	private PApplet parent;
@@ -324,8 +324,8 @@ public class Myo {
 		UNPAIR,
 		CONNECT,
 		DISCONNECT,
-		ARM_RECOGNIZED,
-		ARM_LOST,
+		ARM_SYNC,
+		ARM_UNSYNC,
 		POSE,
 		ORIENTATION,
 		ACCELEROMETER,
