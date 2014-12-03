@@ -35,10 +35,10 @@ void myoOnDisconnect(Myo myo, long timestamp) {
   println("Sketch: myoOnDisconnect");
 }
 
-void myoOnArmRecognized(Myo myo, long timestamp, Myo.Arm ARM) {
+void myoOnArmRecognized(Myo myo, long timestamp, Arm arm) {
   println("Sketch: myoOnArmRecognized");
 
-  switch (ARM) {
+  switch (arm.getType()) {
   case LEFT:
     println("Left arm.");
     break;
@@ -60,9 +60,9 @@ void myoOnArmUnsync(Myo myo, long timestamp) {
   println("Sketch: myoOnArmUnsync");
 }
 
-void myoOnPose(Myo myo, long timestamp, Myo.Pose POSE) {
+void myoOnPose(Myo myo, long timestamp, Pose pose) {
   println("Sketch: myoOnPose");
-  switch (POSE) {
+  switch (pose.getType()) {
   case REST:
     println("Pose: REST");
     break;
@@ -105,8 +105,8 @@ void myoOnRssi(Myo myo, long timestamp, int rssi) {
 
 // ----------------------------------------------------------
 
-void myoOn(Myo.Event EVENT, Myo myo, long timestamp) {
-  switch(EVENT) {
+void myoOn(Myo.Event event, Myo myo, long timestamp) {
+  switch(event) {
   case PAIR:
     println("myoOn PAIR");
     break;

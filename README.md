@@ -12,6 +12,7 @@ Library to use the [Myo](https://www.thalmic.com) [SDK](https://developer.thalmi
 - [Tested](#tested)
 - [Examples](#examples)
 - [Usage](#usage)
+- [Changelog](#changelog)
 - [Questions?](#questions)
 - [License](#license)
 
@@ -23,7 +24,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.6.0b](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.6.1b](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **beta** implementation, so have a look at the [development branch](https://github.com/voidplus/myo-processing/tree/dev).
 
@@ -53,7 +54,7 @@ Myo hardware device:
 Myo SDK version:
 
 - **0.6.0b**
-- **0.5.1b**
+- 0.5.1b
 
 Processing version:
 
@@ -112,10 +113,10 @@ void myoOnDisconnect(Myo myo, long timestamp) {
   println("Sketch: myoOnDisconnect");
 }
 
-void myoOnArmSync(Myo myo, long timestamp, Myo.Arm ARM) {
+void myoOnArmSync(Myo myo, long timestamp, Arm arm) {
   println("Sketch: myoOnArmSync");
 
-  switch (ARM) {
+  switch (arm.getType()) {
   case LEFT:
     println("Left arm.");
     break;
@@ -137,9 +138,9 @@ void myoOnArmUnsync(Myo myo, long timestamp) {
   println("Sketch: myoOnArmUnsync");
 }
 
-void myoOnPose(Myo myo, long timestamp, Myo.Pose POSE) {
+void myoOnPose(Myo myo, long timestamp, Pose pose) {
   println("Sketch: myoOnPose");
-  switch (POSE) {
+  switch (pose.getType()) {
   case REST:
     println("Pose: REST");
     break;
@@ -182,8 +183,8 @@ void myoOnRssi(Myo myo, long timestamp, int rssi) {
 
 // ----------------------------------------------------------
 
-void myoOn(Myo.Event EVENT, Myo myo, long timestamp) {
-  switch(EVENT) {
+void myoOn(Myo.Event event, Myo myo, long timestamp) {
+  switch(event) {
   case PAIR:
     println("myoOn PAIR");
     break;
@@ -226,6 +227,11 @@ void myoOn(Myo.Event EVENT, Myo myo, long timestamp) {
 ## Questions?
 
 Don't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.de).
+
+
+## Changelog
+
+- TODO: Add link to changes of last commit.
 
 
 ## License

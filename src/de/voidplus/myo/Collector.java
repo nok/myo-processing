@@ -110,23 +110,23 @@ public class Collector implements DeviceListener {
 	@Override
 	public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
 		if(arm != com.thalmic.myo.enums.Arm.ARM_UNKNOWN){
-			if(this.myo.arm.asRaw() != arm){
+			if(this.myo.arm.type.asRaw() != arm){
 				switch(arm){
 				case ARM_LEFT:
-					this.myo.arm = de.voidplus.myo.Myo.Arm.LEFT;
+					this.myo.arm.type = de.voidplus.myo.Arm.Type.LEFT;
 					break;
 				case ARM_RIGHT:
-					this.myo.arm = de.voidplus.myo.Myo.Arm.RIGHT;
+					this.myo.arm.type = de.voidplus.myo.Arm.Type.RIGHT;
 					break;
 				case ARM_UNKNOWN:
-					this.myo.arm = de.voidplus.myo.Myo.Arm.UNKNOWN;
+					this.myo.arm.type = de.voidplus.myo.Arm.Type.UNKNOWN;
 					break;
 				}
 				
 				this.dispatchLocalEvent("myoOnArmSync", new Class[] {
 					de.voidplus.myo.Myo.class,
 					long.class,
-					de.voidplus.myo.Myo.Arm.class
+					de.voidplus.myo.Arm.class
 				}, new Object[] {
 					this.myo,
 					timestamp,
@@ -139,8 +139,8 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onArmUnsync(Myo myo, long timestamp) {
-		this.myo.arm = de.voidplus.myo.Myo.Arm.UNKNOWN;
-		this.myo.pose = de.voidplus.myo.Myo.Pose.UNKNOWN;
+		this.myo.arm.type = de.voidplus.myo.Arm.Type.UNKNOWN;
+		this.myo.pose.type = de.voidplus.myo.Pose.Type.UNKNOWN;
 		
 		this.dispatchLocalEvent("myoOnArmUnsync", new Class[] {
 			de.voidplus.myo.Myo.class,
@@ -153,32 +153,32 @@ public class Collector implements DeviceListener {
 	}
 	
 	@Override
-	public void onPose(Myo myo, long timestamp, com.thalmic.myo.Pose pose) {
+	public void onPose(Myo myo, long timestamp, com.thalmic.myo.Pose pose) { 
 		if (pose.getType() != com.thalmic.myo.enums.PoseType.UNKNOWN) {
-			boolean oldPoseIsRest = this.myo.pose.asRaw() == com.thalmic.myo.enums.PoseType.REST;
-			boolean newPoseChanged = this.myo.pose.asRaw() != pose.getType();
+			boolean oldPoseIsRest = this.myo.pose.type.asRaw() == com.thalmic.myo.enums.PoseType.REST;
+			boolean newPoseChanged = this.myo.pose.type.asRaw() != pose.getType();
 			
 			switch (pose.getType()) {
 			case REST:
-				this.myo.pose = de.voidplus.myo.Myo.Pose.REST;
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.REST;
 				break;
 			case FIST:
-				this.myo.pose = de.voidplus.myo.Myo.Pose.FIST;
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.FIST;
 				break;
 			case WAVE_IN:
-				this.myo.pose = de.voidplus.myo.Myo.Pose.WAVE_IN;
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.WAVE_IN;
 				break;
 			case WAVE_OUT:
-				this.myo.pose = de.voidplus.myo.Myo.Pose.WAVE_OUT;
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.WAVE_OUT;
 				break;
 			case FINGERS_SPREAD:
-				this.myo.pose = de.voidplus.myo.Myo.Pose.FINGERS_SPREAD;
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.FINGERS_SPREAD;
 				break;
 //			case RESERVED_1:
 //				this.myo.pose = de.voidplus.myo.Myo.Pose.RESERVED_1;
 //				break;
 			case THUMB_TO_PINKY:
-				this.myo.pose = de.voidplus.myo.Myo.Pose.THUMB_TO_PINKY;
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.THUMB_TO_PINKY;
 				break;
 //			case UNKNOWN:
 //				this.myo.pose = de.voidplus.myo.Myo.Pose.UNKNOWN;
@@ -189,7 +189,7 @@ public class Collector implements DeviceListener {
 				this.dispatchLocalEvent("myoOnPose", new Class[] {
 					de.voidplus.myo.Myo.class,
 					long.class,
-					de.voidplus.myo.Myo.Pose.class
+					de.voidplus.myo.Pose.class
 				}, new Object[] {
 					this.myo,
 					timestamp,

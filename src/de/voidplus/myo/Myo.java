@@ -8,7 +8,7 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.6.0b";
+	private final static String VERSION = "0.6.1b";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
 	
 	private PApplet parent;
@@ -49,8 +49,8 @@ public class Myo {
 		this.collector = new Collector(this);
 		this.hub.addListener(this.collector);
 		
-		this.arm = Arm.UNKNOWN;
-		this.pose = Pose.UNKNOWN;
+		this.arm = new Arm();
+		this.pose = new Pose();
 		this.orientation = new PVector();
 		this.accelerometer = new PVector();
 		this.gyroscope = new PVector();
@@ -198,7 +198,7 @@ public class Myo {
 	 * @return Name of latest pose.
 	 */
 	public String getPose() {
-		return this.pose.toString().toUpperCase();
+		return this.pose.getTypeAsStr();
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class Myo {
 	 * @return Type of recognized arm.
 	 */
 	public String getArm() {
-		return this.arm.toString().toUpperCase();
+		return this.arm.getTypeAsStr();
 	}
 	
 	/**
@@ -216,7 +216,7 @@ public class Myo {
 	 * @return
 	 */
 	public boolean hasArm(){
-		return this.arm != Arm.UNKNOWN;
+		return this.arm.hasArm();
 	}
 	
 	/**
@@ -225,14 +225,7 @@ public class Myo {
 	 * @return
 	 */
 	public Boolean isArmLeft(){
-		switch (this.arm) {
-		case LEFT:
-			return true;
-		case RIGHT:
-			return false;
-		default:
-			return null;
-		}
+		return this.arm.isLeft();
 	}
 	
 	/**
@@ -315,11 +308,11 @@ public class Myo {
 		this.log(message, 1);
 	}
 
-
-	// ------------------------------------------------------------------------------
-	// Enums
 	
-	public static enum Event {
+	// ------------------------------------------------------------------------------
+	// Verbose & logging
+	
+	public enum Event {
 		PAIR,
 		UNPAIR,
 		CONNECT,
@@ -331,31 +324,6 @@ public class Myo {
 		ACCELEROMETER,
 		GYROSCOPE,
 		RSSI
-	}
-	
-	public static enum Arm {
-		LEFT(com.thalmic.myo.enums.Arm.ARM_LEFT),
-		RIGHT(com.thalmic.myo.enums.Arm.ARM_RIGHT),
-		UNKNOWN(com.thalmic.myo.enums.Arm.ARM_UNKNOWN);
-		
-	    private final com.thalmic.myo.enums.Arm arm;
-		private Arm(com.thalmic.myo.enums.Arm arm) { this.arm = arm; }
-		protected com.thalmic.myo.enums.Arm asRaw() { return this.arm; }
-	}
-	
-	public static enum Pose {
-	    REST(com.thalmic.myo.enums.PoseType.REST),
-	    FIST(com.thalmic.myo.enums.PoseType.FIST),
-	    WAVE_IN(com.thalmic.myo.enums.PoseType.WAVE_IN),
-	    WAVE_OUT(com.thalmic.myo.enums.PoseType.WAVE_OUT),
-	    FINGERS_SPREAD(com.thalmic.myo.enums.PoseType.FINGERS_SPREAD),
-	    RESERVED_1(com.thalmic.myo.enums.PoseType.RESERVED_1),
-	    THUMB_TO_PINKY(com.thalmic.myo.enums.PoseType.THUMB_TO_PINKY),
-	    UNKNOWN(com.thalmic.myo.enums.PoseType.UNKNOWN);
-	    
-	    private final com.thalmic.myo.enums.PoseType pose;
-		private Pose(com.thalmic.myo.enums.PoseType pose) { this.pose = pose; }
-		protected com.thalmic.myo.enums.PoseType asRaw() { return this.pose; }
 	}
 	
 }
