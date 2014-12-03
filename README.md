@@ -231,7 +231,10 @@ Don't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.d
 
 ## Changelog
 
-- TODO: Add link to changes of last commit.
+
+### 0.6.1b
+
+- Refactored and cleaned up classes (more OO). [Have a look on the basic example](https://github.com/voidplus/myo-processing/commit/e069aff5543043648f28ae1a89f3d299d9391b35?diff=split#diff-3).
 
 
 ## License
