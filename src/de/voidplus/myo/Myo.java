@@ -8,7 +8,9 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.6.1b";
+	private final static String VERSION = "0.7.0b";
+	private final static String MYO_SDK_VERSION = "0.7.0b";
+	private final static String MYO_FIRMWARE_VERSION = "1.1.4";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
 	
 	private PApplet parent;
@@ -27,7 +29,7 @@ public class Myo {
 	protected int rssi;
 	
 	public Myo(PApplet parent) {
-		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - "+Myo.REPOSITORY);
+		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - Support: Myo SDK v"+Myo.MYO_SDK_VERSION+", Firmware v"+Myo.MYO_FIRMWARE_VERSION+" - "+Myo.REPOSITORY);
 		
 		parent.registerMethod("pre", this);
 //		parent.registerMethod("post", this);
@@ -323,7 +325,9 @@ public class Myo {
 		ORIENTATION,
 		ACCELEROMETER,
 		GYROSCOPE,
-		RSSI
+		RSSI,
+		LOCK,
+		UNLOCK
 	}
 	
 }

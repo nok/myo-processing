@@ -56,6 +56,14 @@ void myoOnArmRecognized(Myo myo, long timestamp, Arm arm) {
   }
 }
 
+void myoOnLock(Myo myo, long timestamp){
+  println("Sketch: myoOnLock");
+}
+  
+void myoOnUnLock(Myo myo, long timestamp){
+  println("Sketch: myoOnUnLock");
+}
+
 void myoOnArmUnsync(Myo myo, long timestamp) {
   println("Sketch: myoOnArmUnsync");
 }
@@ -73,8 +81,8 @@ void myoOnPose(Myo myo, long timestamp, Pose pose) {
   case FINGERS_SPREAD:
     println("Pose: FINGERS_SPREAD");
     break;
-  case THUMB_TO_PINKY:
-    println("Pose: THUMB_TO_PINKY");
+  case DOUBLE_TAP:
+    println("Pose: DOUBLE_TAP");
     break;
   case WAVE_IN:
     println("Pose: WAVE_IN");

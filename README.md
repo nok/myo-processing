@@ -24,7 +24,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.6.1b](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.7.0b](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **beta** implementation, so have a look at the [development branch](https://github.com/voidplus/myo-processing/tree/dev).
 
@@ -36,8 +36,8 @@ Unzip and put the extracted *MyoForProcessing* folder into the libraries folder 
 
 ## Dependencies
 
-- [Myo Connect v0.6.0](https://developer.thalmic.com/downloads)
-- [Myo Firmware v1.0.3](https://developer.thalmic.com/downloads)
+- [Myo Connect v0.7.0b](https://developer.thalmic.com/downloads)
+- [Myo Firmware v1.1.4](https://developer.thalmic.com/downloads)
 
 
 ## Tested
@@ -53,8 +53,9 @@ Myo hardware device:
 
 Myo SDK version:
 
-- **0.6.0b**
-- 0.5.1b
+- **0.7.1b**
+- [0.6.0b](https://github.com/voidplus/myo-processing/releases/tag/v0.6.1b)
+- [0.5.1b](https://github.com/voidplus/myo-processing/releases/tag/v0.5b)
 
 Processing version:
 
@@ -231,6 +232,9 @@ Don't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.d
 
 ## Changelog
 
+### 0.7.0b
+
+- Added support for Myo SDK version 0.7.0b
 
 ### 0.6.1b
 

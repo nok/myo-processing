@@ -177,8 +177,8 @@ public class Collector implements DeviceListener {
 //			case RESERVED_1:
 //				this.myo.pose = de.voidplus.myo.Myo.Pose.RESERVED_1;
 //				break;
-			case THUMB_TO_PINKY:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.THUMB_TO_PINKY;
+			case DOUBLE_TAP:
+				this.myo.pose.type = de.voidplus.myo.Pose.Type.DOUBLE_TAP;
 				break;
 //			case UNKNOWN:
 //				this.myo.pose = de.voidplus.myo.Myo.Pose.UNKNOWN;
@@ -280,6 +280,32 @@ public class Collector implements DeviceListener {
 			rssi
 		}, 3);
 		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.RSSI, this.myo, timestamp, 3);
+	}
+
+
+	@Override
+	public void onLock(Myo myo, long timestamp) {
+		this.dispatchLocalEvent("myoOnLock", new Class[]{
+			de.voidplus.myo.Myo.class,
+			long.class
+		}, new Object[]{
+			this.myo,
+			timestamp
+		}, 3);
+		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.LOCK, this.myo, timestamp, 3);
+	}
+
+
+	@Override
+	public void onUnlock(Myo arg0, long timestamp) {
+		this.dispatchLocalEvent("myoOnUnLock", new Class[]{
+			de.voidplus.myo.Myo.class,
+			long.class
+		}, new Object[]{
+			this.myo,
+			timestamp
+		}, 3);
+		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.UNLOCK, this.myo, timestamp, 3);
 	}
 
 }

@@ -35,8 +35,7 @@ public class Pose {
 	    WAVE_IN(com.thalmic.myo.enums.PoseType.WAVE_IN),
 	    WAVE_OUT(com.thalmic.myo.enums.PoseType.WAVE_OUT),
 	    FINGERS_SPREAD(com.thalmic.myo.enums.PoseType.FINGERS_SPREAD),
-	    RESERVED_1(com.thalmic.myo.enums.PoseType.RESERVED_1),
-	    THUMB_TO_PINKY(com.thalmic.myo.enums.PoseType.THUMB_TO_PINKY),
+	    DOUBLE_TAP(com.thalmic.myo.enums.PoseType.DOUBLE_TAP),
 	    UNKNOWN(com.thalmic.myo.enums.PoseType.UNKNOWN);
 	    
 	    private final com.thalmic.myo.enums.PoseType pose;
