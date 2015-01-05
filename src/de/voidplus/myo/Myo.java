@@ -1,6 +1,7 @@
 package de.voidplus.myo;
 
 import com.thalmic.myo.FirmwareVersion;
+import com.thalmic.myo.enums.StreamEmgType;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -8,9 +9,9 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.7.0b";
-	private final static String MYO_SDK_VERSION = "0.7.0b";
-	private final static String MYO_FIRMWARE_VERSION = "1.1.4";
+	private final static String VERSION = "0.8.0.1";
+	private final static String MYO_SDK_VERSION = "0.8.0";
+	private final static String MYO_FIRMWARE_VERSION = "1.1.5";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
 	
 	private PApplet parent;
@@ -27,6 +28,9 @@ public class Myo {
 	protected Pose pose;
 	protected PVector orientation, accelerometer, gyroscope;
 	protected int rssi;
+	
+	protected int[] emg;
+	protected boolean withEmg;
 	
 	public Myo(PApplet parent) {
 		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - Support: Myo SDK v"+Myo.MYO_SDK_VERSION+", Firmware v"+Myo.MYO_FIRMWARE_VERSION+" - "+Myo.REPOSITORY);
@@ -56,6 +60,8 @@ public class Myo {
 		this.orientation = new PVector();
 		this.accelerometer = new PVector();
 		this.gyroscope = new PVector();
+		
+		this.withEmg = false;
 	}
 
 
@@ -266,6 +272,32 @@ public class Myo {
 		return this.gyroscope;
 	}
 	
+	/**
+	 * Get raw data of EMG sensors.
+	 * 
+	 * @return
+	 */
+	public int[] getEmg() {
+		return this.emg;
+	}
+
+	/**
+	 * Enable EMG mode.
+	 */
+	public void withEmg() {
+		this.emg = new int[8];
+		this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_ENABLED);
+		this.withEmg = true;
+	}
+	
+	/**
+	 * Disable EMG mode.
+	 */
+	public void withoutEmg() {
+		this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_DISABLED);
+		this.withEmg = false;
+	}
+	
 	
 	// ------------------------------------------------------------------------------
 	// Verbose & logging
@@ -326,6 +358,7 @@ public class Myo {
 		ACCELEROMETER,
 		GYROSCOPE,
 		RSSI,
+		EMG,
 		LOCK,
 		UNLOCK
 	}

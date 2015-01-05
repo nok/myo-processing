@@ -53,6 +53,16 @@ public class Collector implements DeviceListener {
 	public void onPair(Myo myo, long timestamp, FirmwareVersion firmwareVersion) {
 		this.myo.setFirmware(firmwareVersion);
 		
+		if(this.myo.withEmg){
+			if (this.myo.emg != null) {
+				for (int i = 0; i < this.myo.emg.length; i++) {
+					this.myo.emg[i] = 0;
+				}
+			} else {
+				this.myo.emg = new int[8];
+			}			
+		}
+
 		this.dispatchLocalEvent("myoOnPair", new Class[] {
 			de.voidplus.myo.Myo.class,
 			long.class,
@@ -282,7 +292,6 @@ public class Collector implements DeviceListener {
 		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.RSSI, this.myo, timestamp, 3);
 	}
 
-
 	@Override
 	public void onLock(Myo myo, long timestamp) {
 		this.dispatchLocalEvent("myoOnLock", new Class[]{
@@ -295,7 +304,6 @@ public class Collector implements DeviceListener {
 		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.LOCK, this.myo, timestamp, 3);
 	}
 
-
 	@Override
 	public void onUnlock(Myo arg0, long timestamp) {
 		this.dispatchLocalEvent("myoOnUnLock", new Class[]{
@@ -306,6 +314,27 @@ public class Collector implements DeviceListener {
 			timestamp
 		}, 3);
 		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.UNLOCK, this.myo, timestamp, 3);
+	}
+
+	@Override
+	public void onEmgData(Myo myo, long timestamp, byte[] data) {
+		if(this.myo.withEmg && data!=null){
+//			System.out.println(Arrays.toString(data));
+			for (int i = 0; i < 8; i++) {
+				this.myo.emg[i] = data[i];
+			}
+//			System.out.println(Arrays.toString(this.myo.emg));
+			this.dispatchLocalEvent("myoOnEmg", new Class[]{
+				de.voidplus.myo.Myo.class,
+				long.class,
+				int[].class
+			}, new Object[]{
+				this.myo,
+				timestamp,
+				this.myo.emg
+			}, 4);
+			this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.EMG, this.myo, timestamp, 4);
+		}
 	}
 
 }

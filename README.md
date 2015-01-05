@@ -24,7 +24,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.7.0b](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.8.0.1](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **beta** implementation, so have a look at the [development branch](https://github.com/voidplus/myo-processing/tree/dev).
 
@@ -36,8 +36,8 @@ Unzip and put the extracted *MyoForProcessing* folder into the libraries folder 
 
 ## Dependencies
 
-- [Myo Connect v0.7.0b](https://developer.thalmic.com/downloads)
-- [Myo Firmware v1.1.4](https://developer.thalmic.com/downloads)
+- [Myo Connect v0.8.0](https://developer.thalmic.com/downloads)
+- [Myo Firmware v1.1.5](https://developer.thalmic.com/downloads)
 
 
 ## Tested
@@ -53,7 +53,8 @@ Myo hardware device:
 
 Myo SDK version:
 
-- **0.7.0b**
+- **0.8.0**
+- [0.7.0b](https://github.com/voidplus/myo-processing/releases/tag/v0.7.0b)
 - [0.6.0b](https://github.com/voidplus/myo-processing/releases/tag/v0.6.1b)
 - [0.5.1b](https://github.com/voidplus/myo-processing/releases/tag/v0.5b)
 
@@ -66,7 +67,7 @@ Processing version:
 ## Examples
 
 - [Basic Data-Access](#basic-data-access) → [e1_basic.pde](examples/e1_basic/e1_basic.pde)
-
+- [Raw Data-Access (EMG)](#raw-data-access-emg) → [e2_emg_data.pde](examples/e2_emg_data/e2_emg_data.pde)
 
 ## Usage
 
@@ -232,6 +233,52 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
 }
 ```
 
+### Raw Data-Access (EMG)
+
+```java
+import de.voidplus.myo.*;
+
+Myo myo;
+
+void setup() {
+  size(800, 500);
+  background(255);
+  // ...
+
+  myo = new Myo(this);
+  
+  myo.withEmg();
+  // myo.withoutEmg();
+}
+
+void draw() {
+  background(255);
+  // ...
+}
+
+// ----------------------------------------------------------
+
+void myoOnEmg(Myo myo, long timestamp, int[] data) {
+  println("Sketch: myoOnEmg");
+  for(int i = 0; i<data.length; i++){
+    println(data[i]); // [-128 - 127]
+  }
+}
+
+// ----------------------------------------------------------
+
+void myoOn(Myo.Event event, Myo myo, long timestamp) {
+  switch(event) {
+  case EMG:
+    println("myoOn EMG");
+    int[] data = myo.getEmg();
+    for(int i = 0; i<data.length; i++){
+      println(data[i]); // [-128 - 127] 
+    }
+    break;
+  }
+}
+```
 
 ## Questions?
 
@@ -239,6 +286,10 @@ Don't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.d
 
 
 ## Changelog
+
+### 0.8.0.1
+
+- Added support for Myo SDK version 0.8.0
 
 ### 0.7.0b
 
