@@ -165,37 +165,37 @@ public class Collector implements DeviceListener {
 	@Override
 	public void onPose(Myo myo, long timestamp, com.thalmic.myo.Pose pose) { 
 		if (pose.getType() != com.thalmic.myo.enums.PoseType.UNKNOWN) {
-			boolean oldPoseIsRest = this.myo.pose.type.asRaw() == com.thalmic.myo.enums.PoseType.REST;
+//			boolean oldPoseIsRest = this.myo.pose.type.asRaw() == com.thalmic.myo.enums.PoseType.REST;
 			boolean newPoseChanged = this.myo.pose.type.asRaw() != pose.getType();
 			
-			switch (pose.getType()) {
-			case REST:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.REST;
-				break;
-			case FIST:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.FIST;
-				break;
-			case WAVE_IN:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.WAVE_IN;
-				break;
-			case WAVE_OUT:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.WAVE_OUT;
-				break;
-			case FINGERS_SPREAD:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.FINGERS_SPREAD;
-				break;
-//			case RESERVED_1:
-//				this.myo.pose = de.voidplus.myo.Myo.Pose.RESERVED_1;
-//				break;
-			case DOUBLE_TAP:
-				this.myo.pose.type = de.voidplus.myo.Pose.Type.DOUBLE_TAP;
-				break;
-//			case UNKNOWN:
-//				this.myo.pose = de.voidplus.myo.Myo.Pose.UNKNOWN;
-//				break;
-			}
-			
-			if (oldPoseIsRest && newPoseChanged) {
+			if (newPoseChanged) {
+				switch (pose.getType()) {
+				case REST:
+					this.myo.pose.type = de.voidplus.myo.Pose.Type.REST;
+					break;
+				case FIST:
+					this.myo.pose.type = de.voidplus.myo.Pose.Type.FIST;
+					break;
+				case WAVE_IN:
+					this.myo.pose.type = de.voidplus.myo.Pose.Type.WAVE_IN;
+					break;
+				case WAVE_OUT:
+					this.myo.pose.type = de.voidplus.myo.Pose.Type.WAVE_OUT;
+					break;
+				case FINGERS_SPREAD:
+					this.myo.pose.type = de.voidplus.myo.Pose.Type.FINGERS_SPREAD;
+					break;
+//				case RESERVED_1:
+//					this.myo.pose = de.voidplus.myo.Myo.Pose.RESERVED_1;
+//					break;
+				case DOUBLE_TAP:
+					this.myo.pose.type = de.voidplus.myo.Pose.Type.DOUBLE_TAP;
+					break;
+//				case UNKNOWN:
+//					this.myo.pose = de.voidplus.myo.Myo.Pose.UNKNOWN;
+//					break;
+				}
+				
 				this.dispatchLocalEvent("myoOnPose", new Class[] {
 					de.voidplus.myo.Myo.class,
 					long.class,

@@ -9,7 +9,7 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.0.1";
+	private final static String VERSION = "0.8.0.2";
 	private final static String MYO_SDK_VERSION = "0.8.0";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.5";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
@@ -42,7 +42,7 @@ public class Myo {
 		this.parent = parent;
 		this.setVerbose(false)
 			.setVerboseLevel(1)
-			.setFrequency(50);
+			.setFrequency(30);
 
 		this.hub = new com.thalmic.myo.Hub();
 		this.myo = hub.waitForMyo(10000);

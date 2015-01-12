@@ -24,7 +24,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.8.0.1](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.8.0.2](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **beta** implementation, so have a look at the [development branch](https://github.com/voidplus/myo-processing/tree/dev).
 
@@ -286,6 +286,11 @@ Don't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.d
 
 
 ## Changelog
+
+### 0.8.0.2
+
+- Added new visual example
+- Improved events for detected poses
 
 ### 0.8.0.1
 
