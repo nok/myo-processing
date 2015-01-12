@@ -68,6 +68,7 @@ Processing version:
 
 - [Basic Data-Access](#basic-data-access) → [e1_basic.pde](examples/e1_basic/e1_basic.pde)
 - [Raw Data-Access (EMG)](#raw-data-access-emg) → [e2_emg_data.pde](examples/e2_emg_data/e2_emg_data.pde)
+- Visual application → [e3_application.pde](examples/e3_application/e3_application.pde)
 
 ## Usage
 
