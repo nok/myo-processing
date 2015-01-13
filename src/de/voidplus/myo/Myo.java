@@ -9,7 +9,7 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.0.2";
+	private final static String VERSION = "0.8.0.3";
 	private final static String MYO_SDK_VERSION = "0.8.0";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.5";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
