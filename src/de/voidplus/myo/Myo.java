@@ -9,7 +9,7 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.0.3";
+	private final static String VERSION = "0.8.0.4";
 	private final static String MYO_SDK_VERSION = "0.8.0";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.5";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
@@ -51,6 +51,16 @@ public class Myo {
 			throw new RuntimeException("Unable to find a Myo!");
 		}
 		this.log("Connected to a Myo armband.");
+		
+		if (this.myo != null) {
+			new Thread() {
+				public void run() {
+					while (true) {
+						hub.run(frequency);
+					}
+				}
+			}.start();
+		}
 		
 		this.collector = new Collector(this);
 		this.hub.addListener(this.collector);
