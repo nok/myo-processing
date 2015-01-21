@@ -9,9 +9,10 @@ import processing.core.PVector;
 public class Myo {
 
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.0.4";
-	private final static String MYO_SDK_VERSION = "0.8.0";
-	private final static String MYO_FIRMWARE_VERSION = "1.1.5";
+	private final static String VERSION = "0.8.1.1";
+	private final static String MYO_SDK_VERSION = "0.8.1";
+	private final static String MYO_FIRMWARE_VERSION = "1.1.755";
+	private final static String MYO_FIRMWARE_VERSION_ALPHA = "1.1.5";
 	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
 	
 	private PApplet parent;
@@ -33,7 +34,7 @@ public class Myo {
 	protected boolean withEmg;
 	
 	public Myo(PApplet parent) {
-		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - Support: Myo SDK v"+Myo.MYO_SDK_VERSION+", Firmware v"+Myo.MYO_FIRMWARE_VERSION+" - "+Myo.REPOSITORY);
+		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - Support: Myo SDK v"+Myo.MYO_SDK_VERSION+", Firmware v"+Myo.MYO_FIRMWARE_VERSION+", Alpha Firmware v"+Myo.MYO_FIRMWARE_VERSION_ALPHA+" - "+Myo.REPOSITORY);
 		
 		parent.registerMethod("pre", this);
 //		parent.registerMethod("post", this);
