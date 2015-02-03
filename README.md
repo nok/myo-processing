@@ -12,7 +12,6 @@ Library to use the [Myo](https://www.thalmic.com) [SDK](https://developer.thalmi
 - [Tested](#tested)
 - [Examples](#examples)
 - [Usage](#usage)
-- [Changelog](#changelog)
 - [Questions?](#questions)
 - [License](#license)
 
@@ -26,7 +25,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 - [Myo for Processing v0.8.1.1](download/MyoForProcessing.zip?raw=true)
 
-Note: If you are interested in the newest **beta** implementation, so have a look at the [dev branch](tree/dev).
+Note: If you are interested in the newest **beta** implementation, so have a look at the **dev branch**.
 
 
 ## Installation
@@ -286,4 +285,4 @@ Don't be shy and feel free to contact me on Twitter: [@darius_morawiec](https://
 
 ## License
 
-The library is Open Source Software released under the [License](LICENSE). It's developed by [Darius Morawiec](http://voidplus.de).
+The library is Open Source Software released under the [License](LICENSE).
