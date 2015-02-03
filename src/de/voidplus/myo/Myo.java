@@ -13,7 +13,7 @@ public class Myo {
 	private final static String MYO_SDK_VERSION = "0.8.1";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.755";
 	private final static String MYO_FIRMWARE_VERSION_ALPHA = "1.1.5";
-	private final static String REPOSITORY = "https://github.com/voidplus/myo-processing";
+	private final static String REPOSITORY = "https://github.com/nok/myo-processing";
 	
 	private PApplet parent;
 	private boolean verbose;

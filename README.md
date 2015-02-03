@@ -26,7 +26,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 - [Myo for Processing v0.8.1.1](download/MyoForProcessing.zip?raw=true)
 
-Note: If you are interested in the newest **beta** implementation, so have a look at the [development branch](https://github.com/voidplus/myo-processing/tree/dev).
+Note: If you are interested in the newest **beta** implementation, so have a look at the [dev branch](tree/dev).
 
 
 ## Installation
@@ -137,7 +137,7 @@ void myoOnArmSync(Myo myo, long timestamp, Arm arm) {
 void myoOnLock(Myo myo, long timestamp){
   println("Sketch: myoOnLock");
 }
-  
+
 void myoOnUnLock(Myo myo, long timestamp){
   println("Sketch: myoOnUnLock");
 }
@@ -244,7 +244,7 @@ void setup() {
   // ...
 
   myo = new Myo(this);
-  
+
   myo.withEmg();
   // myo.withoutEmg();
 }
@@ -271,42 +271,19 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
     println("myoOn EMG");
     int[] data = myo.getEmg();
     for(int i = 0; i<data.length; i++){
-      println(data[i]); // [-128 - 127] 
+      println(data[i]); // [-128 - 127]
     }
     break;
   }
 }
 ```
 
+
 ## Questions?
 
-Don't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.de).
-
-
-## Changelog
-
-### 0.8.1.1
-
-- Added support for Myo SDK version 0.8.1
-
-### 0.8.0.2
-
-- Added new visual example
-- Improved events for detected poses
-
-### 0.8.0.1
-
-- Added support for Myo SDK version 0.8.0
-
-### 0.7.0b
-
-- Added support for Myo SDK version 0.7.0b
-
-### 0.6.1b
-
-- Refactored and cleaned up classes (more OO). [Have a look on the basic example](https://github.com/voidplus/myo-processing/commit/e069aff5543043648f28ae1a89f3d299d9391b35?diff=split#diff-3).
+Don't be shy and feel free to contact me on Twitter: [@darius_morawiec](https://twitter.com/darius_morawiec)
 
 
 ## License
 
-The library is Open Source Software released under the [License](LICENSE.txt). It's developed by [Darius Morawiec](http://voidplus.de).
+The library is Open Source Software released under the [License](LICENSE). It's developed by [Darius Morawiec](http://voidplus.de).
