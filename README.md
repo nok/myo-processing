@@ -23,7 +23,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.8.1.2](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.8.2.1](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **beta** implementation, so have a look at the **dev branch**.
 
@@ -35,7 +35,7 @@ Unzip and put the extracted *MyoForProcessing* folder into the libraries folder 
 
 ## Dependencies
 
-- [Myo Connect v0.8.0](https://developer.thalmic.com/downloads)
+- [Myo Connect v0.8.1](https://developer.thalmic.com/downloads)
 - [Myo Firmware v1.1.5](https://developer.thalmic.com/downloads)
 
 
