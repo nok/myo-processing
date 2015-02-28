@@ -18,15 +18,6 @@ public class Arm {
 	}
 	
 	/**
-	 * Get the type of arm as String.
-	 * 
-	 * @return
-	 */
-	public String getTypeAsStr() {
-		return this.getType().toString().toUpperCase();
-	}
-	
-	/**
 	 * Arm recognized?
 	 * 
 	 * @return
@@ -61,9 +52,6 @@ public class Arm {
 	public Boolean isRight(){
 		return !this.isLeft();
 	}
-	
-	// ------------------------------------------------------------------------------
-	// Enums
 	
 	public static enum Type {
 		LEFT(com.thalmic.myo.enums.Arm.ARM_LEFT),

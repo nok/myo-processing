@@ -17,18 +17,6 @@ public class Pose {
 		return this.type;
 	}
 	
-	/**
-	 * Get the type of pose as String.
-	 * 
-	 * @return
-	 */
-	public String getTypeAsStr() {
-		return this.getType().toString().toUpperCase();
-	}
-	
-	// ------------------------------------------------------------------------------
-	// Enums
-	
 	public static enum Type {
 	    REST(com.thalmic.myo.enums.PoseType.REST),
 	    FIST(com.thalmic.myo.enums.PoseType.FIST),

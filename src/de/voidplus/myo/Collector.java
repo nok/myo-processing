@@ -10,6 +10,8 @@ import com.thalmic.myo.Vector3;
 import com.thalmic.myo.enums.Arm;
 import com.thalmic.myo.enums.XDirection;
 
+import de.voidplus.myo.Myo.Event;
+
 public class Collector implements DeviceListener {
 
 	private de.voidplus.myo.Myo myo;
@@ -23,10 +25,10 @@ public class Collector implements DeviceListener {
 	// ------------------------------------------------------------------------------
 	// Interface
 	
-	private void dispatchGlobalEvent(de.voidplus.myo.Myo.Event event, de.voidplus.myo.Myo myo, long timestamp, int logLevel){
+	private void dispatchGlobalEvent(Event event, de.voidplus.myo.Myo myo, long timestamp, int logLevel){
 		this.myo.dispatch(new Class[] {
-			de.voidplus.myo.Myo.Event.class,
-			de.voidplus.myo.Myo.class,
+			event.getClass(),
+			myo.getClass(),
 			long.class
 		}, new Object[] {
 			event,
@@ -34,7 +36,7 @@ public class Collector implements DeviceListener {
 			timestamp
 		}, logLevel);
 	}
-	private void dispatchGlobalEvent(de.voidplus.myo.Myo.Event event, de.voidplus.myo.Myo myo, long timestamp){
+	private void dispatchGlobalEvent(Event event, de.voidplus.myo.Myo myo, long timestamp){
 		this.dispatchGlobalEvent(event, myo, timestamp, 1);
 	}
 	
@@ -65,6 +67,7 @@ public class Collector implements DeviceListener {
 
 		this.dispatchLocalEvent("myoOnPair", new Class[] {
 			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class,
 			String.class
 		}, new Object[] {
@@ -72,19 +75,19 @@ public class Collector implements DeviceListener {
 			timestamp,
 			this.myo.getFirmware()
 		});
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.PAIR, this.myo, timestamp);
+		this.dispatchGlobalEvent(Event.PAIR, this.myo, timestamp);
 	}
 
 	@Override
 	public void onUnpair(Myo myo, long timestamp) {
 		this.dispatchLocalEvent("myoOnUnpair", new Class[] {
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class
 		}, new Object[] {
 			this.myo,
 			timestamp
 		});
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.UNPAIR, this.myo, timestamp);
+		this.dispatchGlobalEvent(Event.UNPAIR, this.myo, timestamp);
 	}
 	
 	@Override
@@ -92,7 +95,7 @@ public class Collector implements DeviceListener {
 		this.myo.setFirmware(firmwareVersion);
 		
 		this.dispatchLocalEvent("myoOnConnect", new Class[] {
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class,
 			String.class
 		}, new Object[] {
@@ -108,13 +111,13 @@ public class Collector implements DeviceListener {
 		this.myo.setFirmware(null);
 		
 		this.dispatchLocalEvent("myoOnDisconnect", new Class[] {
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class
 		}, new Object[] {
 			this.myo,
 			timestamp
 		});
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.DISCONNECT, this.myo, timestamp);
+		this.dispatchGlobalEvent(Event.DISCONNECT, this.myo, timestamp);
 	}
 	
 	@Override
@@ -134,7 +137,7 @@ public class Collector implements DeviceListener {
 				}
 				
 				this.dispatchLocalEvent("myoOnArmSync", new Class[] {
-					de.voidplus.myo.Myo.class,
+					this.myo.getClass(),
 					long.class,
 					de.voidplus.myo.Arm.class
 				}, new Object[] {
@@ -142,7 +145,7 @@ public class Collector implements DeviceListener {
 					timestamp,
 					this.myo.arm
 				}, 2);
-				this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ARM_SYNC, this.myo, timestamp);
+				this.dispatchGlobalEvent(Event.ARM_SYNC, this.myo, timestamp);
 			}		
 		}
 	}	
@@ -153,13 +156,13 @@ public class Collector implements DeviceListener {
 		this.myo.pose.type = de.voidplus.myo.Pose.Type.UNKNOWN;
 		
 		this.dispatchLocalEvent("myoOnArmUnsync", new Class[] {
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class
 		}, new Object[] {
 			this.myo,
 			timestamp
 		});
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ARM_UNSYNC, this.myo, timestamp);
+		this.dispatchGlobalEvent(Event.ARM_UNSYNC, this.myo, timestamp);
 	}
 	
 	@Override
@@ -197,16 +200,16 @@ public class Collector implements DeviceListener {
 				}
 				
 				this.dispatchLocalEvent("myoOnPose", new Class[] {
-					de.voidplus.myo.Myo.class,
+					this.myo.getClass(),
 					long.class,
-					de.voidplus.myo.Pose.class
+					this.myo.pose.getClass()
 				}, new Object[] {
 					this.myo,
 					timestamp,
 					this.myo.pose
 				}, 2);
 			}
-			this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.POSE, this.myo, timestamp, 2);
+			this.dispatchGlobalEvent(Event.POSE, this.myo, timestamp, 2);
 		}
 	}
 
@@ -225,7 +228,7 @@ public class Collector implements DeviceListener {
 		);	
 		
 		this.dispatchLocalEvent("myoOnOrientation", new Class[]{
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class,
 			processing.core.PVector.class
 		}, new Object[]{
@@ -233,7 +236,7 @@ public class Collector implements DeviceListener {
 			timestamp,
 			this.myo.orientation
 		}, 4);
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ORIENTATION, this.myo, timestamp, 4);
+		this.dispatchGlobalEvent(Event.ORIENTATION, this.myo, timestamp, 4);
 	}
 	
 	@Override
@@ -245,7 +248,7 @@ public class Collector implements DeviceListener {
 		);	
 			
 		this.dispatchLocalEvent("myoOnAccelerometer", new Class[]{
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class,
 			processing.core.PVector.class
 		}, new Object[]{
@@ -253,7 +256,7 @@ public class Collector implements DeviceListener {
 			timestamp,
 			this.myo.accelerometer
 		}, 4);
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.ACCELEROMETER, this.myo, timestamp, 4);
+		this.dispatchGlobalEvent(Event.ACCELEROMETER, this.myo, timestamp, 4);
 	}
 
 	@Override
@@ -265,7 +268,7 @@ public class Collector implements DeviceListener {
 		);
 				
 		this.dispatchLocalEvent("myoOnGyroscope", new Class[]{
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class,
 			processing.core.PVector.class
 		}, new Object[]{
@@ -273,7 +276,7 @@ public class Collector implements DeviceListener {
 			timestamp,
 			this.myo.gyroscope
 		}, 4);
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.GYROSCOPE, this.myo, timestamp, 4);
+		this.dispatchGlobalEvent(Event.GYROSCOPE, this.myo, timestamp, 4);
 	}
 
 	@Override
@@ -281,7 +284,7 @@ public class Collector implements DeviceListener {
 		this.myo.rssi = rssi;
 		
 		this.dispatchLocalEvent("myoOnRssi", new Class[]{
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class,
 			int.class
 		}, new Object[]{
@@ -289,31 +292,31 @@ public class Collector implements DeviceListener {
 			timestamp,
 			rssi
 		}, 3);
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.RSSI, this.myo, timestamp, 3);
+		this.dispatchGlobalEvent(Event.RSSI, this.myo, timestamp, 3);
 	}
 
 	@Override
 	public void onLock(Myo myo, long timestamp) {
 		this.dispatchLocalEvent("myoOnLock", new Class[]{
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class
 		}, new Object[]{
 			this.myo,
 			timestamp
 		}, 3);
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.LOCK, this.myo, timestamp, 3);
+		this.dispatchGlobalEvent(Event.LOCK, this.myo, timestamp, 3);
 	}
 
 	@Override
 	public void onUnlock(Myo arg0, long timestamp) {
 		this.dispatchLocalEvent("myoOnUnLock", new Class[]{
-			de.voidplus.myo.Myo.class,
+			this.myo.getClass(),
 			long.class
 		}, new Object[]{
 			this.myo,
 			timestamp
 		}, 3);
-		this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.UNLOCK, this.myo, timestamp, 3);
+		this.dispatchGlobalEvent(Event.UNLOCK, this.myo, timestamp, 3);
 	}
 
 	@Override
@@ -325,7 +328,7 @@ public class Collector implements DeviceListener {
 			}
 //			System.out.println(Arrays.toString(this.myo.emg));
 			this.dispatchLocalEvent("myoOnEmg", new Class[]{
-				de.voidplus.myo.Myo.class,
+				this.myo.getClass(),
 				long.class,
 				int[].class
 			}, new Object[]{
@@ -333,7 +336,7 @@ public class Collector implements DeviceListener {
 				timestamp,
 				this.myo.emg
 			}, 4);
-			this.dispatchGlobalEvent(de.voidplus.myo.Myo.Event.EMG, this.myo, timestamp, 4);
+			this.dispatchGlobalEvent(Event.EMG, this.myo, timestamp, 4);
 		}
 	}
 
