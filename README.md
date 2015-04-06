@@ -1,6 +1,6 @@
 # Myo for Processing
 
-Library to use the [Myo](https://www.thalmic.com) [SDK](https://developer.thalmic.com/docs/api_reference/platform/index.html) in [Processing](http://processing.org/).
+Library to use the [Myo](https://www.thalmic.com) in [Processing](http://processing.org/).
 
 
 ## Table of Contents
@@ -23,9 +23,9 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.8.2.1](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.8.1.2](download/MyoForProcessing.zip?raw=true)
 
-Note: If you are interested in the newest **beta** implementation, so have a look at the **dev branch**.
+Note: If you are interested in the newest **development** implementation, so have a look at the [dev branch](https://github.com/nok/myo-processing/tree/dev).
 
 
 ## Installation

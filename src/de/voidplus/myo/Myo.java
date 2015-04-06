@@ -10,6 +10,12 @@ import com.thalmic.myo.enums.StreamEmgType;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+/**
+ * 
+ * @author Darius Morawiec
+ * @version 0.8.1.2
+ *
+ */
 public class Myo {
 	
 	// Processing
@@ -38,7 +44,7 @@ public class Myo {
 	protected boolean withEmg;
 	
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.2.1";
+	private final static String VERSION = "0.8.1.2";
 	private final static String MYO_SDK_VERSION = "0.8.1";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.755";
 	private final static String MYO_FIRMWARE_VERSION_ALPHA = "1.1.5";
@@ -46,24 +52,7 @@ public class Myo {
 	
 	public Myo(PApplet parent) {
 		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - Support: Myo SDK v"+Myo.MYO_SDK_VERSION+", Firmware v"+Myo.MYO_FIRMWARE_VERSION+", Alpha Firmware v"+Myo.MYO_FIRMWARE_VERSION_ALPHA+" - "+Myo.REPOSITORY);
-		
-		// Add myo.framework to Java library path manually
-		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-			try {
-				String framework = new File(Myo.class.getProtectionDomain()
-						.getCodeSource().getLocation().toURI()).getParentFile()
-						.toString()
-						+ File.separator
-						+ "macosx"
-						+ File.separator
-						+ "myo.framework";
-				System.setProperty("java.library.path", framework);
-//				stream = System.err;
-//				System.setErr(new PrintStream(new ByteArrayOutputStream()));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		this.checkDependencies();
 		
 		parent.registerMethod("pre", this);
 //		parent.registerMethod("post", this);
@@ -108,7 +97,40 @@ public class Myo {
 		this.gyroscope = new PVector();
 	}
 
-
+	
+	// ------------------------------------------------------------------------------
+	// Dependencies
+	
+	private void checkDependencies() {
+		// MAC
+		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+			// Add 'libraries/macosx' path to the 'java.library.path' to load 'myo.framework' manually
+			try {
+				String pLibPath = new File(Myo.class.getProtectionDomain()
+						.getCodeSource().getLocation().toURI()).getParentFile()
+						.toString()
+						+ File.separator
+						+ "macosx"
+						+ File.separator;
+				File pLibDir = new File(pLibPath);
+				if (pLibDir.exists() && pLibDir.isDirectory()) {
+					File myoLibFile = new File(pLibDir.getAbsoluteFile()
+							+ File.separator + "myo.framework");
+					if (myoLibFile.exists() && myoLibFile.isDirectory()) {
+						String libPath = System
+								.getProperty("java.library.path")
+								+ ":"
+								+ pLibDir.getAbsolutePath();
+						System.setProperty("java.library.path", libPath);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	// ------------------------------------------------------------------------------
 	// Lifecycle of PApplet sketch
 	
