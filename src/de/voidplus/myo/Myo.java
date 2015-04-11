@@ -36,7 +36,7 @@ import processing.core.PVector;
 /**
  * 
  * @author Darius Morawiec
- * @version 0.8.1.2
+ * @version 0.8.1.3
  *
  */
 public class Myo {
@@ -73,7 +73,7 @@ public class Myo {
 	protected boolean withEmg;
 	
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.1.2";
+	private final static String VERSION = "0.8.1.3";
 	private final static String MYO_SDK_VERSION = "0.8.1";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.755";
 	private final static String MYO_FIRMWARE_VERSION_ALPHA = "1.1.5";
