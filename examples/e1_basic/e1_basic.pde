@@ -20,23 +20,23 @@ void draw() {
 // ----------------------------------------------------------
 
 void myoOnPair(Myo myo, long timestamp, String firmware) {
-  println("Sketch: myoOnPair");
+  println("Sketch: myoOnPair & Device: "+myo.getId());
 }
 
 void myoOnUnpair(Myo myo, long timestamp) {
-  println("Sketch: myoOnUnpair");
+  println("Sketch: myoOnUnpair & Device: "+myo.getId());
 }
 
 void myoOnConnect(Myo myo, long timestamp, String firmware) {
-  println("Sketch: myoOnConnect");
+  println("Sketch: myoOnConnect & Device: "+myo.getId());
 }
 
 void myoOnDisconnect(Myo myo, long timestamp) {
-  println("Sketch: myoOnDisconnect");
+  println("Sketch: myoOnDisconnect & Device: "+myo.getId());
 }
 
 void myoOnArmRecognized(Myo myo, long timestamp, Arm arm) {
-  println("Sketch: myoOnArmRecognized");
+  println("Sketch: myoOnArmRecognized & Device: "+myo.getId());
 
   switch (arm.getType()) {
   case LEFT:
@@ -57,19 +57,19 @@ void myoOnArmRecognized(Myo myo, long timestamp, Arm arm) {
 }
 
 void myoOnLock(Myo myo, long timestamp){
-  println("Sketch: myoOnLock");
+  println("Sketch: myoOnLock & Device: "+myo.getId());
 }
   
 void myoOnUnLock(Myo myo, long timestamp){
-  println("Sketch: myoOnUnLock");
+  println("Sketch: myoOnUnLock & Device: "+myo.getId());
 }
 
 void myoOnArmUnsync(Myo myo, long timestamp) {
-  println("Sketch: myoOnArmUnsync");
+  println("Sketch: myoOnArmUnsync & Device: "+myo.getId());
 }
 
 void myoOnPose(Myo myo, long timestamp, Pose pose) {
-  println("Sketch: myoOnPose");
+  println("Sketch: myoOnPose & Device: "+myo.getId());
   switch (pose.getType()) {
   case REST:
     println("Pose: REST");
@@ -96,24 +96,26 @@ void myoOnPose(Myo myo, long timestamp, Pose pose) {
 }
 
 void myoOnOrientation(Myo myo, long timestamp, PVector orientation) {
-  // println("Sketch: myoOnOrientation");
+  // println("Sketch: myoOnOrientation & Device: "+myo.getId());
 }
 
 void myoOnAccelerometer(Myo myo, long timestamp, PVector accelerometer) {
-  // println("Sketch: myoOnAccelerometer");
+  // println("Sketch: myoOnAccelerometer & Device: "+myo.getId());
 }
 
 void myoOnGyroscope(Myo myo, long timestamp, PVector gyroscope) {
-  // println("Sketch: myoOnGyroscope");
+  // println("Sketch: myoOnGyroscope & Device: "+myo.getId());
 }
 
 void myoOnRssi(Myo myo, long timestamp, int rssi) {
-  println("Sketch: myoOnRssi");
+  // println("Sketch: myoOnRssi & Device: "+myo.getId());
 }
 
 // ----------------------------------------------------------
 
 void myoOn(Myo.Event event, Myo myo, long timestamp) {
+  // println("Sketch: myoOn & Device: "+myo.getId());
+  
   switch(event) {
   case PAIR:
     println("myoOn PAIR");

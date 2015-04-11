@@ -9,7 +9,6 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.Vector3;
 import com.thalmic.myo.enums.Arm;
 import com.thalmic.myo.enums.XDirection;
-
 import de.voidplus.myo.Myo.Event;
 
 
@@ -84,15 +83,15 @@ public class Collector implements DeviceListener {
 	 * @param myo The original com.thalmic.myo.Myo instance to compare the references.
 	 * @return
 	 */
-	private int identifyDevice(com.thalmic.myo.Myo myo) {
+	private Integer identifyDevice(com.thalmic.myo.Myo myo) {
 		if(this.devices.size() > 1){
 			for (int i = 0; i < this.devices.size(); i++) {
 				if (this.devices.get(i) == myo) {
-					return i + 1;
+					return new Integer(i + 1);
 				}
 			}
 		}
-		return 0;
+		return new Integer(1);
 	}
 	
 	@Override
@@ -304,7 +303,9 @@ public class Collector implements DeviceListener {
 	}
 
 	@Override
-	public void onUnlock(Myo arg0, long timestamp) {
+	public void onUnlock(Myo myo, long timestamp) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.dispatchLocalEvent("myoOnUnLock", new Class[]{
 			this.myo.getClass(),
 			long.class

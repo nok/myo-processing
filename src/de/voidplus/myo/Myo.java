@@ -342,7 +342,7 @@ public class Myo {
 	 */
 	public int getId() {
 		if (this.id == null) {
-			return 0;
+			return 1;
 		}
 		return this.id;
 	}
