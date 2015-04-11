@@ -268,6 +268,15 @@ public class Myo {
 		return this.vibrate(2);
 	}
 	
+	/**
+	 * An myoOnRssi(Myo, long, int) event will likely be generated with the value of the RSSI.
+	 * @return
+	 */
+	public Myo requestRssi() {
+		this.myo.requestRssi();
+		return this;
+	}
+	
 	//--------------------------------------------------------------------------------
 	// 5.2 Locking	
 	
