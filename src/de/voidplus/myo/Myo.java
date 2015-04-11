@@ -22,7 +22,7 @@ import processing.core.PVector;
 //   5.2 Locking
 // 6 Getters
 //   6.1 Raw or original objects
-//   6.2 Environment
+//   6.2 Device
 //   6.3 Objects
 //     6.3.1 Pose
 //     6.3.2 Arm
@@ -62,6 +62,7 @@ public class Myo {
 	
 	// Myo-Basics
 	private String firmware;
+	protected Integer id;
 	protected Arm arm;
 	protected Pose pose;
 	protected LockingPolicy lockingPolicy;
@@ -332,7 +333,19 @@ public class Myo {
 	}
 	
 	//--------------------------------------------------------------------------------
-	// 6.2 Environment
+	// 6.2 Device
+	
+	/**
+	 * Get the ID of device.
+	 * 
+	 * @return
+	 */
+	public int getId() {
+		if (this.id == null) {
+			return 0;
+		}
+		return this.id;
+	}
 	
 	/**
 	 * Get the firmware of device.
@@ -513,6 +526,16 @@ public class Myo {
 				+"."+firmwareVersion.getFirmwareVersionMinor()
 				+"."+firmwareVersion.getFirmwareVersionPath();
 		}
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param identifyDevice
+	 * @return
+	 */
+	protected Myo setId(int id) {
+		
 		return this;
 	}
 	

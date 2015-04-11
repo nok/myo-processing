@@ -1,7 +1,7 @@
 package de.voidplus.myo;
 
+import java.util.ArrayList;
 import processing.core.PVector;
-
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.FirmwareVersion;
 import com.thalmic.myo.Myo;
@@ -31,6 +31,7 @@ public class Collector implements DeviceListener {
 	// ================================================================================
 	
 	private de.voidplus.myo.Myo myo;
+	private ArrayList<com.thalmic.myo.Myo> devices;
 	private static final int SCALE = 18;
 
 	
@@ -40,6 +41,7 @@ public class Collector implements DeviceListener {
 	
 	public Collector(de.voidplus.myo.Myo myo) {
 		this.myo = myo;
+		this.devices = new ArrayList<com.thalmic.myo.Myo>();
 	}
 	
 	
@@ -76,8 +78,29 @@ public class Collector implements DeviceListener {
     // 4 Callbacks
     //================================================================================
 
+	/**
+	 * Identify the ID of the device.
+	 * 
+	 * @param myo The original com.thalmic.myo.Myo instance to compare the references.
+	 * @return
+	 */
+	private int identifyDevice(com.thalmic.myo.Myo myo) {
+		if(this.devices.size() > 1){
+			for (int i = 0; i < this.devices.size(); i++) {
+				if (this.devices.get(i) == myo) {
+					return i + 1;
+				}
+			}
+		}
+		return 0;
+	}
+	
 	@Override
 	public void onPair(Myo myo, long timestamp, FirmwareVersion firmwareVersion) {
+		if(!this.devices.contains(myo)){
+			this.devices.add(myo);
+		}
+		this.myo.setId(this.identifyDevice(myo));
 		this.myo.setFirmware(firmwareVersion);
 		
 		if(this.myo.withEmg){
@@ -105,6 +128,8 @@ public class Collector implements DeviceListener {
 
 	@Override
 	public void onUnpair(Myo myo, long timestamp) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.dispatchLocalEvent("myoOnUnpair", new Class[] {
 			this.myo.getClass(),
 			long.class
@@ -117,6 +142,7 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onConnect(Myo myo, long timestamp, FirmwareVersion firmwareVersion) {
+		this.myo.setId(this.identifyDevice(myo));
 		this.myo.setFirmware(firmwareVersion);
 		
 		this.dispatchLocalEvent("myoOnConnect", new Class[] {
@@ -133,6 +159,7 @@ public class Collector implements DeviceListener {
 
 	@Override
 	public void onDisconnect(Myo myo, long timestamp) {
+		this.myo.setId(this.identifyDevice(myo));
 		this.myo.setFirmware(null);
 		
 		this.dispatchLocalEvent("myoOnDisconnect", new Class[] {
@@ -147,6 +174,8 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		if(arm != com.thalmic.myo.enums.Arm.ARM_UNKNOWN){
 			if(this.myo.arm.type.asRaw() != arm){
 				switch(arm){
@@ -177,6 +206,8 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onArmUnsync(Myo myo, long timestamp) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.myo.arm.type = de.voidplus.myo.Arm.Type.UNKNOWN;
 		this.myo.pose.type = de.voidplus.myo.Pose.Type.UNKNOWN;
 		
@@ -192,6 +223,8 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onPose(Myo myo, long timestamp, com.thalmic.myo.Pose pose) { 
+		this.myo.setId(this.identifyDevice(myo));
+		
 		if (pose.getType() != com.thalmic.myo.enums.PoseType.UNKNOWN) {
 //			boolean oldPoseIsRest = this.myo.pose.type.asRaw() == com.thalmic.myo.enums.PoseType.REST;
 			boolean newPoseChanged = this.myo.pose.type.asRaw() != pose.getType();
@@ -240,6 +273,8 @@ public class Collector implements DeviceListener {
 
 	@Override
 	public void onRssi(Myo myo, long timestamp, int rssi) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.myo.rssi = rssi;
 		
 		this.dispatchLocalEvent("myoOnRssi", new Class[]{
@@ -256,6 +291,8 @@ public class Collector implements DeviceListener {
 
 	@Override
 	public void onLock(Myo myo, long timestamp) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.dispatchLocalEvent("myoOnLock", new Class[]{
 			this.myo.getClass(),
 			long.class
@@ -280,6 +317,8 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		Quaternion normalized = rotation.normalized();
 		
 		double roll = Math.atan2(2.0f * (normalized.getW() * normalized.getX() + normalized.getY() * normalized.getZ()), 1.0f - 2.0f * (normalized.getX() * normalized.getX() + normalized.getY() * normalized.getY()));
@@ -306,6 +345,8 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onAccelerometerData(Myo myo, long timestamp, Vector3 accelerometer) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.myo.accelerometer = new PVector(
 			(float)accelerometer.getX(),
 			(float)accelerometer.getY(),
@@ -326,6 +367,8 @@ public class Collector implements DeviceListener {
 
 	@Override
 	public void onGyroscopeData(Myo myo, long timestamp, Vector3 gyroscope) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		this.myo.gyroscope = new PVector(
 			(float)gyroscope.getX(),
 			(float)gyroscope.getY(),
@@ -346,6 +389,8 @@ public class Collector implements DeviceListener {
 
 	@Override
 	public void onEmgData(Myo myo, long timestamp, byte[] data) {
+		this.myo.setId(this.identifyDevice(myo));
+		
 		if(this.myo.withEmg && data!=null){
 //			System.out.println(Arrays.toString(data));
 			for (int i = 0; i < 8; i++) {
