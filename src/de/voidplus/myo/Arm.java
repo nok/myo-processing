@@ -1,19 +1,19 @@
 package de.voidplus.myo;
 
 public class Arm {
-	
+
 	protected Type type;
-	
-	protected Arm(){
+
+	protected Arm() {
 		type = Type.UNKNOWN;
 	}
-	
+
 	/**
 	 * Get the type of arm.
 	 * 
 	 * @return
 	 */
-	public de.voidplus.myo.Arm.Type getType(){
+	public de.voidplus.myo.Arm.Type getType() {
 		return this.type;
 	}
 	
@@ -22,7 +22,7 @@ public class Arm {
 	 * 
 	 * @return
 	 */
-	protected boolean hasArm(){
+	protected boolean hasArm() {
 		return this.getType() != Type.UNKNOWN;
 	}
 	
@@ -31,7 +31,7 @@ public class Arm {
 	 * 
 	 * @return
 	 */
-	public Boolean isLeft(){
+	public Boolean isLeft() {
 		switch (this.type) {
 		case LEFT:
 			return true;
@@ -49,18 +49,24 @@ public class Arm {
 	 * 
 	 * @return
 	 */
-	public Boolean isRight(){
+	public Boolean isRight() {
 		return !this.isLeft();
 	}
-	
+
 	public static enum Type {
 		LEFT(com.thalmic.myo.enums.Arm.ARM_LEFT),
 		RIGHT(com.thalmic.myo.enums.Arm.ARM_RIGHT),
 		UNKNOWN(com.thalmic.myo.enums.Arm.ARM_UNKNOWN);
 		
-	    private final com.thalmic.myo.enums.Arm arm;
-		private Type(com.thalmic.myo.enums.Arm arm) { this.arm = arm; }
-		protected com.thalmic.myo.enums.Arm asRaw() { return this.arm; }
+		private final com.thalmic.myo.enums.Arm arm;
+
+		private Type(com.thalmic.myo.enums.Arm arm) {
+			this.arm = arm;
+		}
+
+		protected com.thalmic.myo.enums.Arm asRaw() {
+			return this.arm;
+		}
 	}
-	
+
 }

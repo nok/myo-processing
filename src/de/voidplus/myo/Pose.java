@@ -3,11 +3,11 @@ package de.voidplus.myo;
 public class Pose {
 
 	protected Type type;
-	
-	protected Pose(){
+
+	protected Pose() {
 		type = Type.UNKNOWN;
 	}
-	
+
 	/**
 	 * Get the type of pose.
 	 * 
@@ -18,7 +18,7 @@ public class Pose {
 	}
 	
 	public static enum Type {
-	    REST(com.thalmic.myo.enums.PoseType.REST),
+		REST(com.thalmic.myo.enums.PoseType.REST),
 	    FIST(com.thalmic.myo.enums.PoseType.FIST),
 	    WAVE_IN(com.thalmic.myo.enums.PoseType.WAVE_IN),
 	    WAVE_OUT(com.thalmic.myo.enums.PoseType.WAVE_OUT),
@@ -26,9 +26,15 @@ public class Pose {
 	    DOUBLE_TAP(com.thalmic.myo.enums.PoseType.DOUBLE_TAP),
 	    UNKNOWN(com.thalmic.myo.enums.PoseType.UNKNOWN);
 	    
-	    private final com.thalmic.myo.enums.PoseType pose;
-		private Type(com.thalmic.myo.enums.PoseType pose) { this.pose = pose; }
-		protected com.thalmic.myo.enums.PoseType asRaw() { return this.pose; }
+		private final com.thalmic.myo.enums.PoseType pose;
+
+		private Type(com.thalmic.myo.enums.PoseType pose) {
+			this.pose = pose;
+		}
+
+		protected com.thalmic.myo.enums.PoseType asRaw() {
+			return this.pose;
+		}
 	}
-	
+
 }

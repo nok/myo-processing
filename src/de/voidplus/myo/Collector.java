@@ -12,20 +12,42 @@ import com.thalmic.myo.enums.XDirection;
 
 import de.voidplus.myo.Myo.Event;
 
+
+//=====================================================================================
+// Table of Content
+//=====================================================================================
+//
+// 1 Properties
+// 2 Constructors
+// 4 Interface
+// 5 Callbacks
+
+
 public class Collector implements DeviceListener {
 
+	
+	// ================================================================================
+	// 1 Properties
+	// ================================================================================
+	
 	private de.voidplus.myo.Myo myo;
-    private static final int SCALE = 18;
-    
+	private static final int SCALE = 18;
+
+	
+    //================================================================================
+    // 2 Constructors
+    //================================================================================
+	
 	public Collector(de.voidplus.myo.Myo myo) {
 		this.myo = myo;
 	}
-
 	
-	// ------------------------------------------------------------------------------
-	// Interface
 	
-	private void dispatchGlobalEvent(Event event, de.voidplus.myo.Myo myo, long timestamp, int logLevel){
+    //================================================================================
+    // 3 Interface
+    //================================================================================
+	
+	private void dispatchGlobalEvent(Event event, de.voidplus.myo.Myo myo, long timestamp, int logLevel) {
 		this.myo.dispatch(new Class[] {
 			event.getClass(),
 			myo.getClass(),
@@ -36,20 +58,23 @@ public class Collector implements DeviceListener {
 			timestamp
 		}, logLevel);
 	}
-	private void dispatchGlobalEvent(Event event, de.voidplus.myo.Myo myo, long timestamp){
+
+	private void dispatchGlobalEvent(Event event, de.voidplus.myo.Myo myo, long timestamp) {
 		this.dispatchGlobalEvent(event, myo, timestamp, 1);
 	}
 	
-	private void dispatchLocalEvent(String method, Class[] classes, Object[] objects, int logLevel){
+	private void dispatchLocalEvent(String method, Class[] classes, Object[] objects, int logLevel) {
 		this.myo.dispatch(method, classes, objects, logLevel);
 	}
-	private void dispatchLocalEvent(String method, Class[] classes, Object[] objects){
+	
+	private void dispatchLocalEvent(String method, Class[] classes, Object[] objects) {
 		this.dispatchLocalEvent(method, classes, objects, 1);
 	}
 	
 	
-	// ------------------------------------------------------------------------------
-	// Callbacks
+    //================================================================================
+    // 4 Callbacks
+    //================================================================================
 
 	@Override
 	public void onPair(Myo myo, long timestamp, FirmwareVersion firmwareVersion) {
@@ -214,6 +239,46 @@ public class Collector implements DeviceListener {
 	}
 
 	@Override
+	public void onRssi(Myo myo, long timestamp, int rssi) {
+		this.myo.rssi = rssi;
+		
+		this.dispatchLocalEvent("myoOnRssi", new Class[]{
+			this.myo.getClass(),
+			long.class,
+			int.class
+		}, new Object[]{
+			this.myo,
+			timestamp,
+			rssi
+		}, 3);
+		this.dispatchGlobalEvent(Event.RSSI, this.myo, timestamp, 3);
+	}
+
+	@Override
+	public void onLock(Myo myo, long timestamp) {
+		this.dispatchLocalEvent("myoOnLock", new Class[]{
+			this.myo.getClass(),
+			long.class
+		}, new Object[]{
+			this.myo,
+			timestamp
+		}, 3);
+		this.dispatchGlobalEvent(Event.LOCK, this.myo, timestamp, 3);
+	}
+
+	@Override
+	public void onUnlock(Myo arg0, long timestamp) {
+		this.dispatchLocalEvent("myoOnUnLock", new Class[]{
+			this.myo.getClass(),
+			long.class
+		}, new Object[]{
+			this.myo,
+			timestamp
+		}, 3);
+		this.dispatchGlobalEvent(Event.UNLOCK, this.myo, timestamp, 3);
+	}
+	
+	@Override
 	public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
 		Quaternion normalized = rotation.normalized();
 		
@@ -277,46 +342,6 @@ public class Collector implements DeviceListener {
 			this.myo.gyroscope
 		}, 4);
 		this.dispatchGlobalEvent(Event.GYROSCOPE, this.myo, timestamp, 4);
-	}
-
-	@Override
-	public void onRssi(Myo myo, long timestamp, int rssi) {
-		this.myo.rssi = rssi;
-		
-		this.dispatchLocalEvent("myoOnRssi", new Class[]{
-			this.myo.getClass(),
-			long.class,
-			int.class
-		}, new Object[]{
-			this.myo,
-			timestamp,
-			rssi
-		}, 3);
-		this.dispatchGlobalEvent(Event.RSSI, this.myo, timestamp, 3);
-	}
-
-	@Override
-	public void onLock(Myo myo, long timestamp) {
-		this.dispatchLocalEvent("myoOnLock", new Class[]{
-			this.myo.getClass(),
-			long.class
-		}, new Object[]{
-			this.myo,
-			timestamp
-		}, 3);
-		this.dispatchGlobalEvent(Event.LOCK, this.myo, timestamp, 3);
-	}
-
-	@Override
-	public void onUnlock(Myo arg0, long timestamp) {
-		this.dispatchLocalEvent("myoOnUnLock", new Class[]{
-			this.myo.getClass(),
-			long.class
-		}, new Object[]{
-			this.myo,
-			timestamp
-		}, 3);
-		this.dispatchGlobalEvent(Event.UNLOCK, this.myo, timestamp, 3);
 	}
 
 	@Override
