@@ -97,7 +97,7 @@ public class Myo {
 			.setVerboseLevel(1)
 			.setFrequency(30);
 
-		this.hub = new com.thalmic.myo.Hub("org.processing");
+		this.hub = new com.thalmic.myo.Hub();
 		this.myo = hub.waitForMyo(10000);
 		
 //		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
