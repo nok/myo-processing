@@ -31,7 +31,6 @@ public class Collector implements DeviceListener {
 	
 	private de.voidplus.myo.Myo myo;
 	private ArrayList<com.thalmic.myo.Myo> devices;
-	private static final int SCALE = 18;
 
 	
     //================================================================================
@@ -327,9 +326,9 @@ public class Collector implements DeviceListener {
 		double yaw = Math.atan2(2.0f * (normalized.getW() * normalized.getZ() + normalized.getX() * normalized.getY()), 1.0f - 2.0f * (normalized.getY() * normalized.getY() + normalized.getZ() * normalized.getZ()));
 
 		this.myo.orientation = new PVector(
-			(float)((roll + Math.PI) / (Math.PI * 2.0) * Collector.SCALE),
-			(float)((pitch + Math.PI / 2.0) / Math.PI * Collector.SCALE),
-			(float)((yaw + Math.PI) / (Math.PI * 2.0) * Collector.SCALE)
+			(float)((roll + Math.PI) / (Math.PI * 2.0)),
+			(float)((pitch + Math.PI / 2.0) / Math.PI),
+			(float)((yaw + Math.PI) / (Math.PI * 2.0))
 		);	
 		
 		this.dispatchLocalEvent("myoOnOrientation", new Class[]{
