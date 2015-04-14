@@ -83,7 +83,10 @@ public class Collector implements DeviceListener {
 	 * @return
 	 */
 	private Integer identifyDevice(com.thalmic.myo.Myo myo) {
-		if(this.devices.size() > 1){
+		if (!this.devices.contains(myo)) {
+			this.devices.add(myo);
+		}
+		if (this.devices.size() > 1) {
 			for (int i = 0; i < this.devices.size(); i++) {
 				if (this.devices.get(i) == myo) {
 					return new Integer(i + 1);
@@ -95,9 +98,6 @@ public class Collector implements DeviceListener {
 	
 	@Override
 	public void onPair(Myo myo, long timestamp, FirmwareVersion firmwareVersion) {
-		if(!this.devices.contains(myo)){
-			this.devices.add(myo);
-		}
 		this.myo.setId(this.identifyDevice(myo));
 		this.myo.setFirmware(firmwareVersion);
 		
