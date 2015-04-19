@@ -289,6 +289,14 @@ public class Myo {
 	}
 
 	/**
+	 * The device vibrates with medium strength.
+	 * @return
+	 */
+	public Myo vibrate() {
+		return this.vibrate(2);
+	}
+
+	/**
 	 * An myoOnRssi(Myo, long, int) event will likely be generated with the value of the RSSI.
 	 * @param deviceId ID of the Myo.
 	 * @return

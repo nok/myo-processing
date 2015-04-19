@@ -58,7 +58,7 @@ public class Device {
     //================================================================================
 	
 	/**
-	 * The device vibrates.
+	 * Vibrate device.
 	 * @param level
 	 * @return
 	 */
@@ -75,6 +75,14 @@ public class Device {
 			this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_LONG);
 		}
 		return this;
+	}
+	
+	/**
+	 * Vibrate device with medium strength.
+	 * @return
+	 */
+	public Device vibrate() {
+		return this.vibrate(2);
 	}
 
 	/**
