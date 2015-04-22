@@ -50,14 +50,13 @@ public class Collector implements DeviceListener {
 		Device device = this.myo.identifyDevice(myo);
 		device.setFirmware(firmwareVersion);
 
-		if (device.withEmg) {
-			if (device.emg != null) {
-				for (int i = 0; i < device.emg.length; i++) {
-					device.emg[i] = 0;
-				}
-			} else {
-				device.emg = new int[8];
+		// EMG
+		if (device.emg != null) {
+			for (int i = 0; i < device.emg.length; i++) {
+				device.emg[i] = 0;
 			}
+		} else {
+			device.emg = new int[8];
 		}
 
 		// Local
@@ -701,7 +700,7 @@ public class Collector implements DeviceListener {
 	public void onEmgData(Myo myo, long timestamp, byte[] data) {
 		Device device = this.myo.identifyDevice(myo);
 
-		if (device.withEmg && data != null) {
+		if (this.myo.withEmg && data != null) {
 			for (int i = 0; i < 8; i++) {
 				device.emg[i] = data[i];
 			}

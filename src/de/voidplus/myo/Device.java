@@ -35,7 +35,6 @@ public class Device {
 	protected PVector orientation, accelerometer, gyroscope;
 	protected int rssi;
 	protected int[] emg;
-	protected boolean withEmg;
 
 	
     //=================================================================================
@@ -49,7 +48,6 @@ public class Device {
 		this.orientation = new PVector();
 		this.accelerometer = new PVector();
 		this.gyroscope = new PVector();
-
 		this.id = 0;
 	}
 
@@ -130,10 +128,9 @@ public class Device {
 	 * Enable EMG mode.
 	 * @return
 	 */
-	public Device withEmg() {
+	protected Device withEmg() {
 		this.emg = new int[8];
 		this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_ENABLED);
-		this.withEmg = true;
 		return this;
 	}
 
@@ -141,9 +138,8 @@ public class Device {
 	 * Disable EMG mode.
 	 * @return
 	 */
-	public Device withoutEmg() {
+	protected Device withoutEmg() {
 		this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_DISABLED);
-		this.withEmg = false;
 		return this;
 	}
 	

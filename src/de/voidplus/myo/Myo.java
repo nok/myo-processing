@@ -67,6 +67,7 @@ public class Myo {
 	private com.thalmic.myo.Hub hub;
 	private int frequency;
 	private DeviceListener collector;
+	protected boolean withEmg;
 	
 	private final static String NAME = "Myo";
 	private final static String VERSION = "0.8.1.5";
@@ -93,6 +94,7 @@ public class Myo {
 		// Myo
 		this.checkLibraryDependencies();
 		this.devices = new ArrayList<Device>();
+		this.withEmg = false;
 		this.hub = new com.thalmic.myo.Hub();
 		this.setHubFrequency(30);
 		this.setHubLockingPolicy(Myo.LockingPolicy.STANDARD);
@@ -118,6 +120,11 @@ public class Myo {
 	
 	public void pre() {
 		if (this.hasDevices()) {
+			if (this.withEmg) {
+				for (Device device : self.getDevices()) {
+					device.withEmg();
+				}
+			}
 			this.hub.runOnce(this.frequency);
 		}
 	}
@@ -213,7 +220,6 @@ public class Myo {
 	 * 
 	 * @param object Object, which has to implement the method.
 	 * @param method Name of method, which will be called.
-	 * @param classes Array of classes, which the method has to implement as signature.
 	 * @param objects Array of objects, which stores valuable data for callback.
 	 */
 	protected void dispatch(Object object, String methodName, Class[] classes, Object[] objects, int logLevel) {
@@ -232,7 +238,7 @@ public class Myo {
 				);
 				success = true;
 			} catch (Exception e) {
-				// e.printStackTrace();
+//				e.printStackTrace();
 			} finally {
 				if (success) {
 					Myo.log("Method: " + methodName + "(...); has been called.", logLevel);
@@ -618,6 +624,17 @@ public class Myo {
 	// 8.1 Settings
 	
 	/**
+	 * Get the ID of the first Myo device.
+	 * @return
+	 */
+	public int getId() {
+		if(this.hasDevices()){
+			return this.devices.get(0).getId();
+		}
+		return 0;
+	}
+	
+	/**
 	 * Set the duration accessing data.
 	 * @param frequency Time in milliseconds.
 	 * @return
@@ -666,25 +683,14 @@ public class Myo {
 		this.setLockingPolicy(policy);
 		return this;
 	}
-
-	/**
-	 * Enable EMG mode.
-	 * @param deviceId
-	 * @return
-	 */
-	public Myo withEmg(int deviceId) {
-		if (this.hasDevice(deviceId)) {
-			this.getDevice(deviceId).withEmg();
-		}
-		return this;
-	}
-
+	
 	/**
 	 * Enable EMG mode.
 	 * @return
 	 */
 	public Myo withEmg() {
-		return this.withEmg(0);
+		this.withEmg = true;
+		return this;
 	}
 	
 	/**
@@ -692,19 +698,9 @@ public class Myo {
 	 * @param deviceId
 	 * @return
 	 */
-	public Myo withoutEmg(int deviceId) {
-		if (this.hasDevice(deviceId)) {
-			this.getDevice(deviceId).withoutEmg();
-		}
-		return this;
-	}
-
-	/**
-	 * Disable EMG mode.
-	 * @return
-	 */
 	public Myo withoutEmg() {
-		return this.withEmg(0);
+		this.withEmg = false;
+		return this;
 	}
 	
 	//========================================

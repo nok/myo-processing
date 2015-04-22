@@ -42,7 +42,7 @@ void draw() {
 
 // ----------------------------------------------------------
 
-void myoOnEmg(Myo myo, long timestamp, int[] data) {
+void myoOnEmg(Device myo, long timestamp, int[] data) {
   // println("Sketch: myoOnEmg & Device: "+myo.getId());
   // int[] data <- 8 values from -128 to 127
   
@@ -61,7 +61,7 @@ void myoOnEmg(Myo myo, long timestamp, int[] data) {
 // ----------------------------------------------------------
 
 /*
-void myoOn(Myo.Event event, Myo myo, long timestamp) {
+void myoOn(Myo.Event event, Device myo, long timestamp) {
   switch(event) {
   case EMG:
     // println("myoOn EMG & Device: "+myo.getId());
