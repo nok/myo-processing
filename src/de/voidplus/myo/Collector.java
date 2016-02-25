@@ -1,5 +1,7 @@
 package de.voidplus.myo;
 
+import com.thalmic.myo.enums.WarmupResult;
+import com.thalmic.myo.enums.WarmupState;
 import processing.core.PVector;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.FirmwareVersion;
@@ -228,67 +230,67 @@ public class Collector implements DeviceListener {
 			timestamp
 		}, 1);
 	}
-	
+
 	@Override
-	public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
+	public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection, float v, WarmupState warmupState) {
 		Device device = this.myo.identifyDevice(myo);
-		
+
 		if (arm != com.thalmic.myo.enums.Arm.ARM_UNKNOWN) {
 			if (device.arm.type.asRaw() != arm) {
 				switch (arm) {
-				case ARM_LEFT:
-					device.arm.type = de.voidplus.myo.Arm.Type.LEFT;
-					break;
-				case ARM_RIGHT:
-					device.arm.type = de.voidplus.myo.Arm.Type.RIGHT;
-					break;
-				case ARM_UNKNOWN:
-					device.arm.type = de.voidplus.myo.Arm.Type.UNKNOWN;
-					break;
+					case ARM_LEFT:
+						device.arm.type = de.voidplus.myo.Arm.Type.LEFT;
+						break;
+					case ARM_RIGHT:
+						device.arm.type = de.voidplus.myo.Arm.Type.RIGHT;
+						break;
+					case ARM_UNKNOWN:
+						device.arm.type = de.voidplus.myo.Arm.Type.UNKNOWN;
+						break;
 				}
 
 				// Local
 				this.myo.dispatch("myoOnArmSync", new Class[] {
-					this.myo.getClass(),
-					long.class,
-					de.voidplus.myo.Arm.class
+						this.myo.getClass(),
+						long.class,
+						de.voidplus.myo.Arm.class
 				}, new Object[] {
-					this.myo,
-					timestamp,
-					device.arm
+						this.myo,
+						timestamp,
+						device.arm
 				});
 				this.myo.dispatch("myoOnArmSync", new Class[] {
-					device.getClass(),
-					long.class,
-					de.voidplus.myo.Arm.class
+						device.getClass(),
+						long.class,
+						de.voidplus.myo.Arm.class
 				}, new Object[] {
-					device,
-					timestamp,
-					device.arm
+						device,
+						timestamp,
+						device.arm
 				});
-				
+
 				// Global
 				this.myo.dispatch(new Class[] {
-					Event.class,
-					this.myo.getClass(),
-					long.class
+						Event.class,
+						this.myo.getClass(),
+						long.class
 				}, new Object[] {
-					Event.ARM_SYNC,
-					this.myo,
-					timestamp
+						Event.ARM_SYNC,
+						this.myo,
+						timestamp
 				}, 1);
 				this.myo.dispatch(new Class[] {
-					Event.class,
-					device.getClass(),
-					long.class
+						Event.class,
+						device.getClass(),
+						long.class
 				}, new Object[] {
-					Event.ARM_SYNC,
-					device,
-					timestamp
+						Event.ARM_SYNC,
+						device,
+						timestamp
 				}, 1);
-			}		
+			}
 		}
-	}	
+	}
 	
 	@Override
 	public void onArmUnsync(Myo myo, long timestamp) {
@@ -453,6 +455,11 @@ public class Collector implements DeviceListener {
 			device,
 			timestamp
 		}, 3);
+	}
+
+	@Override
+	public void onBatteryLevelReceived(Myo myo, long l, int i) {
+
 	}
 
 	@Override
@@ -745,6 +752,11 @@ public class Collector implements DeviceListener {
 				timestamp
 			}, 4);
 		}
+	}
+
+	@Override
+	public void onWarmupCompleted(Myo myo, long l, WarmupResult warmupResult) {
+
 	}
 
 }
