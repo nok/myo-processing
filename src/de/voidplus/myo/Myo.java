@@ -43,7 +43,7 @@ import processing.core.PVector;
 
 /**
  * @author Darius Morawiec
- * @version 0.8.1.5
+ * @version 0.9.0-1
  */
 public class Myo {
 
@@ -60,7 +60,7 @@ public class Myo {
     private static int verboseLevel = 1;
 
     // Myo
-    private de.voidplus.myo.Myo self;
+//    private de.voidplus.myo.Myo self;
     private ArrayList<Device> devices;
     private com.thalmic.myo.Hub hub;
     private int frequency;
@@ -68,10 +68,9 @@ public class Myo {
     protected boolean withEmg;
 
     private final static String NAME = "Myo";
-    private final static String VERSION = "0.8.1.5";
-    private final static String MYO_SDK_VERSION = "0.8.1";
-    private final static String MYO_FIRMWARE_VERSION = "1.1.755";
-    private final static String MYO_FIRMWARE_VERSION_ALPHA = "1.1.5";
+    private final static String VERSION = "0.9.0-1";
+    private final static String MYO_SDK_VERSION = "0.9.0";
+    private final static String MYO_FIRMWARE_VERSION = "1.5.1970";
     private final static String REPOSITORY = "https://github.com/nok/myo-processing";
 
 
@@ -80,8 +79,8 @@ public class Myo {
     //================================================================================
 
     public Myo(final PApplet parent) {
-        PApplet.println("# " + Myo.NAME + " v" + Myo.VERSION + " - Support: Myo SDK v" + Myo.MYO_SDK_VERSION + ", Firmware v" + Myo.MYO_FIRMWARE_VERSION + ", Alpha Firmware v" + Myo.MYO_FIRMWARE_VERSION_ALPHA + " - " + Myo.REPOSITORY);
-        self = this;
+        PApplet.println("# " + Myo.NAME + " v" + Myo.VERSION + " - Support: Myo SDK v" + Myo.MYO_SDK_VERSION + ", Firmware v" + Myo.MYO_FIRMWARE_VERSION + " - " + Myo.REPOSITORY);
+//        self = this;
 
         // Processing
         this.parent = parent;
@@ -90,7 +89,7 @@ public class Myo {
         parent.registerMethod("dispose", this);
 
         // Myo
-        this.checkLibraryDependencies();
+//        this.checkLibraryDependencies();
         this.devices = new ArrayList<Device>();
         this.withEmg = false;
         this.hub = new com.thalmic.myo.Hub();
@@ -112,14 +111,14 @@ public class Myo {
             Myo.log("Connected to a Myo armband.");
         }
 
-        this.collector = new Collector(self);
+        this.collector = new Collector(this);
         this.hub.addListener(this.collector);
     }
 
     public void pre() {
         if (this.hasDevices()) {
             if (this.withEmg) {
-                for (Device device : self.getDevices()) {
+                for (Device device : this.getDevices()) {
                     device.withEmg();
                 }
             }
@@ -138,34 +137,34 @@ public class Myo {
     // 3 Dependencies
     //================================================================================
 
-    private void checkLibraryDependencies() {
-        // MAC
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            // Add 'libraries/macosx' path to the 'java.library.path' to load 'myo.framework' manually
-            try {
-                String pLibPath = new File(Myo.class.getProtectionDomain()
-                        .getCodeSource().getLocation().toURI()).getParentFile()
-                        .toString()
-                        + File.separator
-                        + "macosx"
-                        + File.separator;
-                File pLibDir = new File(pLibPath);
-                if (pLibDir.exists() && pLibDir.isDirectory()) {
-                    File myoLibFile = new File(pLibDir.getAbsoluteFile()
-                            + File.separator + "myo.framework");
-                    if (myoLibFile.exists() && myoLibFile.isDirectory()) {
-                        String libPath = System
-                                .getProperty("java.library.path")
-                                + ":"
-                                + pLibDir.getAbsolutePath();
-                        System.setProperty("java.library.path", libPath);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void checkLibraryDependencies() {
+//        // MAC
+//        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+//            // Add 'libraries/macosx' path to the 'java.library.path' to load 'myo.framework' manually
+//            try {
+//                String pLibPath = new File(Myo.class.getProtectionDomain()
+//                        .getCodeSource().getLocation().toURI()).getParentFile()
+//                        .toString()
+//                        + File.separator
+//                        + "macosx"
+//                        + File.separator;
+//                File pLibDir = new File(pLibPath);
+//                if (pLibDir.exists() && pLibDir.isDirectory()) {
+//                    File myoLibFile = new File(pLibDir.getAbsoluteFile()
+//                            + File.separator + "myo.framework");
+//                    if (myoLibFile.exists() && myoLibFile.isDirectory()) {
+//                        String libPath = System
+//                                .getProperty("java.library.path")
+//                                + ":"
+//                                + pLibDir.getAbsolutePath();
+//                        System.setProperty("java.library.path", libPath);
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 
     //================================================================================
@@ -216,9 +215,11 @@ public class Myo {
     /**
      * Intern method to route a specific callback with dynamic data.
      *
-     * @param object  Object, which has to implement the method.
-     * @param method  Name of method, which will be called.
+     * @param object Object, which has to implement the method.
+     * @param methodName Name of method, which will be called.
+     * @param classes
      * @param objects Array of objects, which stores valuable data for callback.
+     * @param logLevel
      */
     protected void dispatch(Object object, String methodName, Class[] classes, Object[] objects, int logLevel) {
         boolean success = false;
@@ -683,7 +684,6 @@ public class Myo {
      *
      * @param frequency
      * @return
-     * @see setFrequency
      */
     public Myo setHubFrequency(int frequency) {
         this.setFrequency(frequency);
@@ -714,7 +714,6 @@ public class Myo {
      *
      * @param policy
      * @return
-     * @see setLockingPolicy
      */
     public Myo setHubLockingPolicy(LockingPolicy policy) {
         this.setLockingPolicy(policy);
@@ -734,7 +733,6 @@ public class Myo {
     /**
      * Disable EMG mode.
      *
-     * @param deviceId
      * @return
      */
     public Myo withoutEmg() {
