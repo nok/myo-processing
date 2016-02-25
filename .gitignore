@@ -1,12 +1,23 @@
+# System
 .DS_Store
 .svn
+
+# Eclipse
 .project
 .classpath
 .settings/
-distribution/
+
+# Project
+src/development/
 lib/
 resources/
+distribution/
 web/
-src/development/
 bin/
 tmp/
+*.psd
+
+# IntelliJ IDEA
+myo-processing.iml
+.idea/
+out/
