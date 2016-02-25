@@ -568,7 +568,7 @@ public class Collector implements DeviceListener {
                 this.myo,
                 timestamp,
                 device.orientation
-        });
+        }, 3);
         this.myo.dispatch("myoOnOrientation", new Class[]{
                 device.getClass(),
                 long.class,
@@ -577,7 +577,7 @@ public class Collector implements DeviceListener {
                 device,
                 timestamp,
                 device.orientation
-        });
+        }, 3);
 
         // Global
         this.myo.dispatch(new Class[]{
@@ -620,7 +620,7 @@ public class Collector implements DeviceListener {
                 this.myo,
                 timestamp,
                 device.accelerometer
-        });
+        }, 3);
         this.myo.dispatch("myoOnAccelerometer", new Class[]{
                 device.getClass(),
                 long.class,
@@ -629,7 +629,7 @@ public class Collector implements DeviceListener {
                 device,
                 timestamp,
                 device.accelerometer
-        });
+        }, 3);
 
         // Global
         this.myo.dispatch(new Class[]{
@@ -671,7 +671,7 @@ public class Collector implements DeviceListener {
                 this.myo,
                 timestamp,
                 device.gyroscope
-        });
+        }, 3);
         this.myo.dispatch("myoOnGyroscope", new Class[]{
                 device.getClass(),
                 long.class,
@@ -680,7 +680,7 @@ public class Collector implements DeviceListener {
                 device,
                 timestamp,
                 device.gyroscope
-        });
+        }, 3);
 
         // Global
         this.myo.dispatch(new Class[]{
@@ -721,7 +721,7 @@ public class Collector implements DeviceListener {
                     this.myo,
                     timestamp,
                     device.emg
-            });
+            }, 3);
             this.myo.dispatch("myoOnEmg", new Class[]{
                     device.getClass(),   // Device
                     long.class,
@@ -730,7 +730,7 @@ public class Collector implements DeviceListener {
                     device,
                     timestamp,
                     device.emg
-            });
+            }, 3);
 
             // Global
             this.myo.dispatch(new Class[]{
