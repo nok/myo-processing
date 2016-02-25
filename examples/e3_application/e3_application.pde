@@ -43,7 +43,7 @@ void draw() {
   }
 }
 
-void myoOnPose(Myo myo, long timestamp, Pose pose) {
+void myoOnPose(Device myo, long timestamp, Pose pose) {
   
   if(!pose.getType().toString().equals("REST")){
     resetImages();
@@ -74,10 +74,10 @@ void myoOnPose(Myo myo, long timestamp, Pose pose) {
   }
 }
 
-void myoOnLock(Myo myo, long timestamp){
+void myoOnLock(Device myo, long timestamp){
   resetImages();
 }
 
-void myoOnUnLock(Myo myo, long timestamp){
+void myoOnUnLock(Device myo, long timestamp){
   resetImages();
 }

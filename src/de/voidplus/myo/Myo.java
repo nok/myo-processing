@@ -1,8 +1,17 @@
 package de.voidplus.myo;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.FirmwareVersion;
+import com.thalmic.myo.Quaternion;
+import com.thalmic.myo.Vector3;
 import com.thalmic.myo.enums.StreamEmgType;
+import com.thalmic.myo.enums.XDirection;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -14,29 +23,28 @@ import processing.core.PVector;
 // 1 Properties
 // 2 Constructors
 // 3 Dependencies
-//   3.1 Libraries
-//   3.2 PApplet lifecycle
-// 4 Interface
-// 5 Commands
-//   5.1 Hardware
-//   5.2 Locking
-// 6 Getters
-//   6.1 Raw or original objects
-//   6.2 Environment
-//   6.3 Objects
-//     6.3.1 Pose
-//     6.3.2 Arm
-//   6.4 Sensors
-// 7 Setters
-//   7.1 Settings
-// 8 Enums
-// 9 Verbose & logging
+// 4 Device handling
+// 5 Interfaces
+// 6 Commands
+//   6.1 Hardware
+//   6.2 Locking
+// 7 Getters
+//   7.1 Raw or original objects
+//   7.2 Device
+//   7.3 Objects
+//     7.3.1 Pose
+//     7.3.2 Arm
+//   7.4 Sensors
+// 8 Setters
+//   8.1 Settings
+// 9 Enums
+// 10 Verbose & logging
 
 
 /**
  * 
  * @author Darius Morawiec
- * @version 0.8.1.2
+ * @version 0.8.1.5
  *
  */
 public class Myo {
@@ -48,31 +56,21 @@ public class Myo {
 	
 	// Processing
 	private PApplet parent;
-//	private PrintStream stream;
 	
 	// Logging
-	private boolean verbose;
-	private int verboseLevel;
+	private static boolean verbose = false;
+	private static int verboseLevel = 1;
 	
-	// Myo-Lifecycle
-	private com.thalmic.myo.Myo myo;
+	// Myo
+	private de.voidplus.myo.Myo self;
+	private ArrayList<Device> devices;
 	private com.thalmic.myo.Hub hub;
-	private Collector collector;
 	private int frequency;
-	
-	// Myo-Basics
-	private String firmware;
-	protected Arm arm;
-	protected Pose pose;
-	protected LockingPolicy lockingPolicy;
-	
-	protected PVector orientation, accelerometer, gyroscope;
-	protected int rssi;
-	protected int[] emg;
+	private DeviceListener collector;
 	protected boolean withEmg;
 	
 	private final static String NAME = "Myo";
-	private final static String VERSION = "0.8.1.2";
+	private final static String VERSION = "0.8.1.5";
 	private final static String MYO_SDK_VERSION = "0.8.1";
 	private final static String MYO_FIRMWARE_VERSION = "1.1.755";
 	private final static String MYO_FIRMWARE_VERSION_ALPHA = "1.1.5";
@@ -83,32 +81,29 @@ public class Myo {
     // 2 Constructors
     //================================================================================
 	
-	public Myo(PApplet parent) {
+	public Myo(final PApplet parent) {
 		PApplet.println("# "+Myo.NAME+" v"+Myo.VERSION+" - Support: Myo SDK v"+Myo.MYO_SDK_VERSION+", Firmware v"+Myo.MYO_FIRMWARE_VERSION+", Alpha Firmware v"+Myo.MYO_FIRMWARE_VERSION_ALPHA+" - "+Myo.REPOSITORY);
-		this.checkDependencies();
+		self = this;
 		
+		// Processing
+		this.parent = parent;
 		parent.registerMethod("pre", this);
 //		parent.registerMethod("post", this);
 		parent.registerMethod("dispose", this);
 		
-		this.parent = parent;
-		this.setVerbose(false)
-			.setVerboseLevel(1)
-			.setFrequency(30);
-
+		// Myo
+		this.checkLibraryDependencies();
+		this.devices = new ArrayList<Device>();
+		this.withEmg = false;
 		this.hub = new com.thalmic.myo.Hub();
-		this.myo = hub.waitForMyo(10000);
+		this.setHubFrequency(30);
+		this.setHubLockingPolicy(Myo.LockingPolicy.STANDARD);
 		
-//		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-//			System.setErr(stream);
-//		}
-		
-		if (this.myo == null) {
+		com.thalmic.myo.Myo myo = hub.waitForMyo(10000);
+		if (myo == null) {
 			throw new RuntimeException("Unable to find a Myo!");
-		}
-		this.log("Connected to a Myo armband.");
-		
-		if (this.myo != null) {
+		} else {
+			this.addDevice(myo);
 			new Thread() {
 				public void run() {
 					while (true) {
@@ -116,29 +111,36 @@ public class Myo {
 					}
 				}
 			}.start();
+			Myo.log("Connected to a Myo armband.");
 		}
 		
-		this.collector = new Collector(this);
+		this.collector = new Collector(self);
 		this.hub.addListener(this.collector);
-		this.withEmg = false;
-
-		this.arm = new Arm();
-		this.pose = new Pose();
-		this.setLockingPolicy(Myo.LockingPolicy.STANDARD);
-		this.orientation = new PVector();
-		this.accelerometer = new PVector();
-		this.gyroscope = new PVector();
+	}
+	
+	public void pre() {
+		if (this.hasDevices()) {
+			if (this.withEmg) {
+				for (Device device : self.getDevices()) {
+					device.withEmg();
+				}
+			}
+			this.hub.runOnce(this.frequency);
+		}
 	}
 
+	public void dispose() {
+		if (this.hasDevices()) {
+			this.hub.removeListener(this.collector);
+		}
+	}
+	
 	
     //================================================================================
     // 3 Dependencies
     //================================================================================
 	
-	//--------------------------------------------------------------------------------
-	// 3.1 Libraries
-	
-	private void checkDependencies() {
+	private void checkLibraryDependencies() {
 		// MAC
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 			// Add 'libraries/macosx' path to the 'java.library.path' to load 'myo.framework' manually
@@ -166,25 +168,51 @@ public class Myo {
 			}
 		}
 	}
+
 	
-	//--------------------------------------------------------------------------------
-	// 3.2 PApplet lifecycle
+    //================================================================================
+    // 4 Device handling
+    //================================================================================
 	
-	public void pre() {
-		if (this.myo != null) {
-			this.hub.runOnce(this.frequency);
-		}
+	public boolean hasDevices() {
+		return !this.devices.isEmpty();
 	}
 
-	public void dispose() {
-		if (this.myo != null) {
-			this.hub.removeListener(this.collector);
+	public boolean hasDevice(int deviceId) {
+		return deviceId > 0 && deviceId <= this.devices.size();
+	}
+
+	public ArrayList<Device> getDevices() {
+		return this.devices;
+	}
+
+	public Device getDevice(int deviceId) {
+		return this.devices.get(deviceId);
+	}
+
+	protected Device addDevice(com.thalmic.myo.Myo myo) {
+		Device device = new Device(myo);
+		Integer deviceId = device.setId(devices.size());
+		this.devices.add(device);
+		return this.devices.get(deviceId);
+	}
+
+	protected Device identifyDevice(com.thalmic.myo.Myo myo) {
+		if (this.devices.isEmpty()) {
+			return this.addDevice(myo);
+		} else {
+			for (int i = 0; i < this.devices.size(); i++) {
+				if (this.devices.get(i).getMyo() == myo) {
+					return this.devices.get(i);
+				}
+			}
+			return this.addDevice(myo);
 		}
 	}
 	
 	
     //================================================================================
-    // 4 Interface
+    // 5 Interfaces
     //================================================================================
 	
 	/**
@@ -192,18 +220,17 @@ public class Myo {
 	 * 
 	 * @param object Object, which has to implement the method.
 	 * @param method Name of method, which will be called.
-	 * @param classes Array of classes, which the method has to implement as signature.
 	 * @param objects Array of objects, which stores valuable data for callback.
 	 */
-	protected void dispatch(Object object, String method, Class[] classes, Object[] objects, int logLevel) {
+	protected void dispatch(Object object, String methodName, Class[] classes, Object[] objects, int logLevel) {
 		boolean success = false;
-		if (method == null) {
-			method = "myoOn";
+		if (methodName == null) {
+			methodName = "myoOn";
 		}
 		if (classes.length == objects.length) {
 			try {
 				object.getClass().getMethod(
-					method,
+					methodName,
 					classes
 				).invoke(
 					this.parent,
@@ -211,61 +238,80 @@ public class Myo {
 				);
 				success = true;
 			} catch (Exception e) {
-				// e.printStackTrace();
+//				e.printStackTrace();
 			} finally {
 				if (success) {
-					this.log("Method: " + method + "(...); has been called.", logLevel);
+					Myo.log("Method: " + methodName + "(...); has been called.", logLevel);
 				}
 			}
 		}
 	}
 
-	protected void dispatch(String method, Class[] classes, Object[] objects, int logLevel) {
-		this.dispatch(this.parent, method, classes, objects, logLevel);
+	// For example: "myOnPair"
+	protected void dispatch(String methodName, Class[] classes, Object[] objects, int logLevel) {
+		this.dispatch(this.parent, methodName, classes, objects, logLevel);
 	}
-
-	protected void dispatch(String method, Class[] classes, Object[] objects) {
-		this.dispatch(this.parent, method, classes, objects, 1);
+	protected void dispatch(String methodName, Class[] classes, Object[] objects) {
+		this.dispatch(this.parent, methodName, classes, objects, 1);
 	}
-
+	
+	// Always: "myOn"
 	protected void dispatch(Class[] classes, Object[] objects, int logLevel) {
 		this.dispatch(this.parent, null, classes, objects, logLevel);
 	}
-
 	protected void dispatch(Class[] classes, Object[] objects) {
 		this.dispatch(this.parent, null, classes, objects, 1);
 	}
-	
+
 	
     //================================================================================
-    // 5 Commands
+    // 6 Commands
     //================================================================================
 	
 	//--------------------------------------------------------------------------------
-	// 5.1 Hardware
+	// 6.1 Hardware
 	
 	/**
-	 * The device will vibrate for haptic feedback.
+	 * The device vibrates.
+	 * @param level
+	 * @param deviceId
+	 * @return
+	 */
+	public Myo vibrate(int level, int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			this.getDevice(deviceId).vibrate(level);
+		}
+		return this;
+	}
+	
+	/**
+	 * The device vibrates.
 	 * @param level Set the level of vibration duration [1,2,3].
 	 * @return
 	 */
 	public Myo vibrate(int level) {
-		switch (level) {
-		case 1:
-			this.log("Vibrating short ...");
-			this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_SHORT);
-		case 2:
-			this.log("Vibrating medium ...");
-			this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_MEDIUM);
-		case 3:
-			this.log("Vibrating long ...");
-			this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_LONG);
-		}
+		this.vibrate(level, 0);
 		return this;
 	}
 
+	/**
+	 * The device vibrates with medium strength.
+	 * @return
+	 */
 	public Myo vibrate() {
 		return this.vibrate(2);
+	}
+
+	/**
+	 * An myoOnRssi(Myo, long, int) event will likely be generated with the value of the RSSI.
+	 * @param deviceId ID of the Myo.
+	 * @return
+	 */
+	public Myo requestRssi(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			this.getDevice(deviceId).requestRssi();
+		}
+		return this;
 	}
 	
 	/**
@@ -273,54 +319,77 @@ public class Myo {
 	 * @return
 	 */
 	public Myo requestRssi() {
-		this.myo.requestRssi();
-		return this;
+		return this.requestRssi(0);
 	}
 	
 	//--------------------------------------------------------------------------------
-	// 5.2 Locking	
-	
+	// 6.2 Locking	
+
 	/**
-	 * Force the Myo to lock immediately.
+	 * Force the Myo locking immediately.
+	 * @param deviceId
 	 * @return
 	 */
-	public Myo lock() {
-		this.myo.lock();
+	public Myo lock(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			this.getDevice(deviceId).lock();
+		}
 		return this;
 	}
 	
+	/**
+	 * Force the Myo locking immediately.
+	 * @return
+	 */
+	public Myo lock() {
+		return this.lock(0);
+	}
+
+	/**
+	 * Unlock the Myo.
+	 * @param mode
+	 * @param deviceId
+	 * @return
+	 */
+	public Myo unlock(Unlock mode, int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			this.getDevice(deviceId).unlock(mode);
+		}
+		return this;
+	}
+
 	/**
 	 * Unlock the Myo.
 	 * @param mode
 	 * @return
 	 */
 	public Myo unlock(Unlock mode) {
-		switch (mode) {
-		case HOLD:
-			this.myo.unlock(com.thalmic.myo.enums.UnlockType.UNLOCK_HOLD);
-			break;
-		case TIMED:
-		default:
-			this.myo.unlock(com.thalmic.myo.enums.UnlockType.UNLOCK_TIMED);
-			break;
-		}
-		return this;
+		return this.unlock(mode, 0);
 	}
 	
-	
+
     //================================================================================
-    // 6 Getters
+    // 7 Getters
     //================================================================================
 	
 	//--------------------------------------------------------------------------------
-	// 6.1 Raw or original objects
+	// 7.1 Raw or original objects
 	
 	/**
 	 * Get access to the raw instance of class Myo.
 	 * @return Active instance of class com.thalmic.myo.Myo.
 	 */
 	public com.thalmic.myo.Myo getRawMyo() {
-		return this.myo;
+		return this.getRawMyo(0);
+	}
+	
+	/**
+	 * Get access to the raw instance of a specific class Myo.
+	 * @param deviceId
+	 * @return
+	 */
+	public com.thalmic.myo.Myo getRawMyo(int deviceId) {
+		return this.getDevice(deviceId).getMyo();
 	}
 
 	/**
@@ -332,129 +401,257 @@ public class Myo {
 	}
 	
 	//--------------------------------------------------------------------------------
-	// 6.2 Environment
+	// 7.2 Device
+	
+	/**
+	 * Get the firmware of specific device.
+	 * @param deviceId
+	 * @return
+	 */
+	public String getFirmware(int deviceId) {
+		if(this.hasDevice(deviceId)){
+			return this.getDevice(deviceId).getFirmware();
+		}
+		return "";
+	}
 	
 	/**
 	 * Get the firmware of device.
-	 * 
 	 * @return
 	 */
 	public String getFirmware() {
-		if (this.firmware == null) {
-			return "";
-		}
-		return this.firmware;
+		return this.getFirmware(0);
 	}
 	
 	//--------------------------------------------------------------------------------
-	// 6.3 Objects
+	// 7.3 Objects
 	
 	//----------------------------------------
-	// 6.3.1 Pose
+	// 7.3.1 Pose
 	
 	/**
 	 * Get the name of the latest pose.
-	 * 
+	 * @param deviceId
+	 * @return Name of latest pose.
+	 */
+	public String getPose(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).getPose();
+		}
+		return "";
+	}
+
+	/**
+	 * Get the name of the latest pose.
 	 * @return Name of latest pose.
 	 */
 	public String getPose() {
-		return this.pose.getType().toString().toUpperCase();
+		return this.getPose(0);
 	}
 	
 	//----------------------------------------
-	// 6.3.2 Arm
+	// 7.3.2 Arm
 
 	/**
 	 * Get the type of recognized arm.
-	 * 
-	 * @return Type of recognized arm.
+	 * @param deviceId
+	 * @return
+	 */
+	public String getArm(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).getArm();
+		}
+		return "";
+	}
+
+	/**
+	 * Get the type of recognized arm.
+	 * @return
 	 */
 	public String getArm() {
-		return this.arm.getType().toString().toUpperCase();
+		return this.getArm(0);
 	}
 
 	/**
 	 * Arm recognized?
-	 * 
+	 * @param deviceId
 	 * @return
 	 */
-	public boolean hasArm() {
-		return this.arm.hasArm();
+	public Boolean hasArm(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).hasArm();
+		}
+		return false;
+	}
+
+	/**
+	 * Arm recognized?
+	 * @return
+	 */
+	public Boolean hasArm() {
+		return this.hasArm(0);
 	}
 
 	/**
 	 * Left arm?
-	 * 
+	 * @param deviceId
+	 * @return
+	 */
+	public Boolean isArmLeft(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).isArmLeft();
+		}
+		return null;
+	}
+
+	/**
+	 * Left arm?
 	 * @return
 	 */
 	public Boolean isArmLeft() {
-		return this.arm.isLeft();
+		return this.hasArm(0);
 	}
 
 	/**
 	 * Right arm?
-	 * 
+	 * @param deviceId
+	 * @return
+	 */
+	public Boolean isArmRight(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).isArmRight();
+		}
+		return null;
+	}
+
+	/**
+	 * Right arm?
 	 * @return
 	 */
 	public Boolean isArmRight() {
-		return !this.isArmLeft();
+		return this.hasArm(0);
 	}
 	
 	//--------------------------------------------------------------------------------
-	// 6.4 Sensors
+	// 7.4 Sensors
 	
 	/**
 	 * Get orientation values of device.
-	 * 
-	 * @return Orientation as PVector, where 'x' is the 'roll' value, 'y' is the 'pitch' value and 'z' the 'yaw' value. 
+	 * @param deviceId
+	 * @return Orientation as PVector, where 'x' is the 'roll' value, 'y' is the 'pitch' value and 'z' the 'yaw' value.
 	 */
-	public PVector getOrientation() {
-		return this.orientation;
+	public PVector getOrientation(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).getOrientation();
+		}
+		return null;
 	}
 	
 	/**
+	 * Get orientation values of device.
+	 * @return Orientation as PVector, where 'x' is the 'roll' value, 'y' is the 'pitch' value and 'z' the 'yaw' value.
+	 */
+	public PVector getOrientation() {
+		return this.getOrientation(0);
+	}
+
+	/**
 	 * Get gyroscope values of device.
-	 * 
+	 * @param deviceId
+	 * @return
+	 */
+	public PVector getAccelerometer(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).getAccelerometer();
+		}
+		return null;
+	}
+
+	/**
+	 * Get gyroscope values of device.
 	 * @return
 	 */
 	public PVector getAccelerometer() {
-		return this.accelerometer;
+		return this.getAccelerometer(0);
 	}
 	
 	/**
 	 * Get gyroscope values of device.
-	 * 
+	 * @param deviceId
+	 * @return
+	 */
+	public PVector getGyroscope(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).getGyroscope();
+		}
+		return null;
+	}
+
+	/**
+	 * Get gyroscope values of device.
 	 * @return
 	 */
 	public PVector getGyroscope() {
-		return this.gyroscope;
+		return this.getGyroscope(0);
 	}
-	
+
 	/**
 	 * Get raw data of EMG sensors.
-	 * 
+	 * @param deviceId
+	 * @return
+	 */
+	public int[] getEmg(int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			return this.getDevice(deviceId).getEmg();
+		}
+		return null;
+	}
+
+	/**
+	 * Get raw data of EMG sensors.
 	 * @return
 	 */
 	public int[] getEmg() {
-		return this.emg;
+		return this.getEmg(0);
 	}
 	
 	
     //================================================================================
-    // 7 Setters
+    // 8 Setters
     //================================================================================
 	
 	//--------------------------------------------------------------------------------
-	// 7.1 Settings
+	// 8.1 Settings
 	
 	/**
-	 * Set the duration to access data. 
-	 * 
+	 * Get the ID of the first Myo device.
+	 * @return
+	 */
+	public int getId() {
+		if(this.hasDevices()){
+			return this.devices.get(0).getId();
+		}
+		return 0;
+	}
+	
+	/**
+	 * Set the duration accessing data.
 	 * @param frequency Time in milliseconds.
 	 * @return
 	 */
 	public Myo setFrequency(int frequency) {
 		this.frequency = frequency;
+		return this;
+	}
+	
+	/**
+	 * Set the duration accessing data. 
+	 * @param frequency
+	 * @see setFrequency
+	 * @return
+	 */
+	public Myo setHubFrequency(int frequency) {
+		this.setFrequency(frequency);
 		return this;
 	}
 	
@@ -477,22 +674,31 @@ public class Myo {
 	}
 
 	/**
+	 * Set the locking policy for Myos connected to the Hub.
+	 * @param policy
+	 * @see setLockingPolicy
+	 * @return
+	 */
+	public Myo setHubLockingPolicy(LockingPolicy policy) {
+		this.setLockingPolicy(policy);
+		return this;
+	}
+	
+	/**
 	 * Enable EMG mode.
 	 * @return
 	 */
 	public Myo withEmg() {
-		this.emg = new int[8];
-		this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_ENABLED);
 		this.withEmg = true;
 		return this;
 	}
 	
 	/**
 	 * Disable EMG mode.
+	 * @param deviceId
 	 * @return
 	 */
 	public Myo withoutEmg() {
-		this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_DISABLED);
 		this.withEmg = false;
 		return this;
 	}
@@ -501,24 +707,29 @@ public class Myo {
 	
 	/**
 	 * Set the firmware of device.
-	 * 
+	 * @param firmwareVersion
+	 * @param deviceId
+	 * @return
+	 */
+	protected Myo setFirmware(FirmwareVersion firmwareVersion, int deviceId) {
+		if (this.hasDevice(deviceId)) {
+			this.getDevice(deviceId).setFirmware(firmwareVersion);
+		}
+		return this;
+	}
+
+	/**
+	 * Set the firmware of device.
 	 * @param firmwareVersion
 	 * @return
 	 */
 	protected Myo setFirmware(FirmwareVersion firmwareVersion) {
-		if (firmwareVersion == null) {
-			this.firmware = "";
-		} else {
-			this.firmware = firmwareVersion.getFirmwareVersionMajor()
-				+"."+firmwareVersion.getFirmwareVersionMinor()
-				+"."+firmwareVersion.getFirmwareVersionPath();
-		}
-		return this;
+		return this.setFirmware(firmwareVersion, 0);
 	}
 	
 	
     //================================================================================
-    // 8 Enums
+    // 9 Enums
     //================================================================================
 	
 	public enum Event {
@@ -535,50 +746,50 @@ public class Myo {
 	
 	
     //================================================================================
-    // 9 Verbose & logging
+    // 10 Verbose & logging
     //================================================================================
 
 	/**
-	 * Print debug information to the console.
-	 * 
+	 * Print debug information to the console. 
 	 * @param 	verbose
 	 * @return
 	 */
 	public Myo setVerbose(boolean verbose) {
-		this.verbose = verbose;
+		Myo.verbose = verbose;
 		return this;
 	}
 	
 	/**
-	 * Set the level of the log level.
-	 * 
+	 * Set the level of the log level. 
 	 * @param level Set the level of the log level [1,2,3]. Three (3) will print lightweight events, too.
 	 */
 	public Myo setVerboseLevel(int level) {
 		if (level > 0 && level < 4) {
-			this.verboseLevel = level;
+			Myo.verboseLevel = level;
 		} else {
-			this.verboseLevel = 1;
+			Myo.verboseLevel = 1;
 		}
 		return this;
 	}
 	
 	/**
 	 * Print log messages to the console.
-	 * 
 	 * @param message Set the readable message of that log.
 	 * @param verboseLevel Set the priority level of that log.
 	 * @return
 	 */
-	protected Myo log(String message, int verboseLevel) {
-		if (this.verbose == true && verboseLevel <= this.verboseLevel) {
+	protected static void log(String message, int verboseLevel) {
+		if (Myo.verbose == true && verboseLevel <= Myo.verboseLevel) {
 			PApplet.println("# " + Myo.NAME + ": LOG (" + verboseLevel + "): " + message);
 		}
-		return this;
 	}
 
-	protected Myo log(String message) {
-		return this.log(message, 1);
+	/**
+	 * Print log messages to the console.
+	 * @param message
+	 */
+	protected static void log(String message) {
+		Myo.log(message, 1);
 	}
 
 }

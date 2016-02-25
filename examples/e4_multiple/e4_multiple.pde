@@ -19,6 +19,7 @@ void draw() {
 
 // ----------------------------------------------------------
 
+// IMPORTANT: "Device" (not class "Myo") !!!        
 void myoOnPair(Device myo, long timestamp, String firmware) {
   println("Sketch: myoOnPair & Device: "+myo.getId());
 }
