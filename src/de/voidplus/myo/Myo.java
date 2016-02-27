@@ -71,10 +71,10 @@ public class Myo {
     private static int verboseLevel = 1;
 
     // Myo
-    private ArrayList<Device> devices;
-    private com.thalmic.myo.Hub _hub;
-    private int frequency;
-    private DeviceListener collector;
+    protected ArrayList<Device> devices;
+    protected com.thalmic.myo.Hub _hub;
+    protected DeviceListener _collector;
+    protected int frequency;
     protected boolean withEmg;
 
 
@@ -100,57 +100,48 @@ public class Myo {
 
         // Processing
         this.parent = parent;
-        this.parent.registerMethod("pre", this);
+//        this.parent.registerMethod("pre", this);
         this.parent.registerMethod("dispose", this);
         this.setVerbose(verbose);
 
         // Myo
         this.checkLibraryDependencies();
         this.devices = new ArrayList<Device>();
-        this.withEmg = false;
         this._hub = new com.thalmic.myo.Hub();
 
         this.setHubFrequency(30);
         this.setHubLockingPolicy(Myo.LockingPolicy.STANDARD);
 
-        com.thalmic.myo.Myo _myo = _hub.waitForMyo(10000);
-
-        if (_myo == null) {
-            throw new RuntimeException("Unable to find a Myo!");
-        } else {
-            this.addDevice(_myo);
-            new Thread() {
-                public void run() {
-                    while (true) {
-                        _hub.run(frequency);
-                    }
+        new Thread() {
+            public void run() {
+                while (true) {
+                    _hub.run(frequency);
                 }
-            }.start();
-            Myo.log("Connected to a Myo armband.");
-        }
+            }
+        }.start();
 
-        this.collector = new Collector(this);
-        this._hub.addListener(this.collector);
+        this._collector = new Collector(this);
+        this._hub.addListener(this._collector);
     }
 
     public Myo(final PApplet parent) {
         this(parent, false);
     }
 
-    public void pre() {
-        if (this.hasDevices()) {
-            if (this.withEmg) {
-                for (Device device : this.getDevices()) {
-                    device.withEmg();
-                }
-            }
-            this._hub.runOnce(this.frequency);
-        }
-    }
+//    public void pre() {
+//        if (this.hasDevices()) {
+//            if (this.withEmg) {
+//                for (Device device : this.getDevices()) {
+//                    device.withEmg();
+//                }
+//            }
+//            this._hub.runOnce(this.frequency);
+//        }
+//    }
 
     public void dispose() {
         if (this.hasDevices()) {
-            this._hub.removeListener(this.collector);
+            this._hub.removeListener(this._collector);
         }
     }
 
@@ -169,6 +160,8 @@ public class Myo {
                     String pathOfDepends = new File(
                             de.voidplus.myo.Myo.class.getProtectionDomain().getCodeSource().getLocation().toURI()
                     ).getParentFile().toString() + File.separator + "macosx" + File.separator;
+
+                    pathOfDepends = "/Users/darius/code/java/workspaces/idea/myo-processing/library/macosx/";
 
                     File dirOfDepends = new File(pathOfDepends);
                     if (dirOfDepends.exists() && dirOfDepends.isDirectory()) {
@@ -194,7 +187,12 @@ public class Myo {
     }
 
     public boolean hasDevice(int deviceId) {
-        return deviceId > 0 && deviceId <= this.devices.size();
+        for (int i = 0; i < this.devices.size(); i++) {
+            if (this.devices.get(i).getId() == deviceId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Device> getDevices() {
@@ -206,10 +204,9 @@ public class Myo {
     }
 
     protected Device addDevice(com.thalmic.myo.Myo myo) {
-        Device device = new Device(myo);
-        Integer deviceId = device.setId(devices.size());
+        Device device = new Device(myo, this.devices.size());
         this.devices.add(device);
-        return this.devices.get(deviceId);
+        return device;
     }
 
     protected Device identifyDevice(com.thalmic.myo.Myo myo) {
@@ -743,8 +740,10 @@ public class Myo {
      *
      * @return
      */
-    public Myo withEmg() {
-        this.withEmg = true;
+    public Myo allDevicesWithEmg() {
+        for(Device device : this.devices){
+            device.withEmg();
+        }
         return this;
     }
 
@@ -753,8 +752,10 @@ public class Myo {
      *
      * @return
      */
-    public Myo withoutEmg() {
-        this.withEmg = false;
+    public Myo allDevicesWithoutEmg() {
+        for(Device device : this.devices){
+            device.withoutEmg();
+        }
         return this;
     }
 
@@ -790,7 +791,13 @@ public class Myo {
     //================================================================================
 
     public enum Event {
-        PAIR, UNPAIR, CONNECT, DISCONNECT, ARM_SYNC, ARM_UNSYNC, POSE, ORIENTATION, ACCELEROMETER, GYROSCOPE, RSSI, EMG, LOCK, UNLOCK
+        PAIR, UNPAIR,
+        CONNECT, DISCONNECT,
+        ARM_SYNC, ARM_UNSYNC,
+        POSE, ORIENTATION,
+        ACCELEROMETER, GYROSCOPE,
+        RSSI, EMG,
+        LOCK, UNLOCK
     }
 
     public enum LockingPolicy {

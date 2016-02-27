@@ -23,7 +23,7 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 ## Download
 
-- [Myo for Processing v0.8.1.5](download/MyoForProcessing.zip?raw=true)
+- [Myo for Processing v0.9.0-1](download/MyoForProcessing.zip?raw=true)
 
 Note: If you are interested in the newest **development** implementation, so have a look at the [dev branch](https://github.com/nok/myo-processing/tree/dev).
 
@@ -35,8 +35,8 @@ Unzip and put the extracted *MyoForProcessing* folder into the libraries folder 
 
 ## Dependencies
 
-- [Myo Connect v0.8.1](https://developer.thalmic.com/downloads)
-- [Myo Firmware v1.1.5](https://developer.thalmic.com/downloads)
+- [Myo Connect v0.9.0](https://developer.thalmic.com/downloads)
+- [Myo Firmware v1.5.1970](https://developer.thalmic.com/downloads)
 
 
 ## Tested
@@ -46,18 +46,14 @@ System:
 - **OSX** (*Mac OS X 10.7 and higher - tested with Mac OS X 10.10 Yosemite*)
 - **Windows** (*not tested yet, but x86 and x64 should work*) (*Windows 7 and 8*)
 
-Myo hardware device:
-
-- **Myo Alpha**
-
 Myo SDK version:
 
-- **0.8.1**
+- **0.9.0**
 
 Processing version:
 
-- **3.0a4**
-- **2.2.1**
+- **3.0.2**
+- 3.0a4
 
 
 ## Examples

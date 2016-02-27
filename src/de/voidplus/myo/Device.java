@@ -34,21 +34,22 @@ public class Device {
     protected String firmware;
     protected PVector orientation, accelerometer, gyroscope;
     protected int rssi;
-    protected int[] emg;
+    protected boolean withEmg;
+    protected int[] emgData;
 
 
     //=================================================================================
     // 2 Constructors
     //=================================================================================
 
-    public Device(com.thalmic.myo.Myo myo) {
+    public Device(com.thalmic.myo.Myo myo, int id) {
         this.myo = myo;
         this.arm = new Arm();
         this.pose = new Pose();
         this.orientation = new PVector();
         this.accelerometer = new PVector();
         this.gyroscope = new PVector();
-        this.id = 0;
+        this.id = id;
     }
 
     //================================================================================
@@ -135,7 +136,8 @@ public class Device {
      * @return
      */
     protected Device withEmg() {
-        this.emg = new int[8];
+        this.withEmg = true;
+        this.emgData = new int[8];
         this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_ENABLED);
         return this;
     }
@@ -146,6 +148,7 @@ public class Device {
      * @return
      */
     protected Device withoutEmg() {
+        this.withEmg = false;
         this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_DISABLED);
         return this;
     }
@@ -303,7 +306,7 @@ public class Device {
      * @return
      */
     public int[] getEmg() {
-        return this.emg;
+        return this.emgData;
     }
 
 }

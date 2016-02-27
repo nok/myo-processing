@@ -53,12 +53,12 @@ public class Collector implements DeviceListener {
         device.setFirmware(firmwareVersion);
 
         // EMG
-        if (device.emg != null) {
-            for (int i = 0; i < device.emg.length; i++) {
-                device.emg[i] = 0;
+        if (device.emgData != null) {
+            for (int i = 0; i < device.emgData.length; i++) {
+                device.emgData[i] = 0;
             }
         } else {
-            device.emg = new int[8];
+            device.emgData = new int[8];
         }
 
         // Local
@@ -709,7 +709,7 @@ public class Collector implements DeviceListener {
 
         if (this.myo.withEmg && data != null) {
             for (int i = 0; i < 8; i++) {
-                device.emg[i] = data[i];
+                device.emgData[i] = data[i];
             }
 
             // Local
@@ -720,7 +720,7 @@ public class Collector implements DeviceListener {
             }, new Object[]{
                     this.myo,
                     timestamp,
-                    device.emg
+                    device.emgData
             }, 3);
             this.myo.dispatch("myoOnEmg", new Class[]{
                     device.getClass(),   // Device
@@ -729,7 +729,7 @@ public class Collector implements DeviceListener {
             }, new Object[]{
                     device,
                     timestamp,
-                    device.emg
+                    device.emgData
             }, 3);
 
             // Global
