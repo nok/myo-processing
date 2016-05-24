@@ -1,5 +1,7 @@
 # Myo for Processing
 
+[![Join the chat at https://gitter.im/nok/myo-processing](https://badges.gitter.im/nok/myo-processing.svg)](https://gitter.im/nok/myo-processing?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Library to use the [Myo](https://www.thalmic.com) in [Processing](http://processing.org/).
 
 
