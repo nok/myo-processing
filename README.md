@@ -63,13 +63,13 @@ Processing version:
 
 ## Examples
 
-- [Basics](#basics) → [Myo_1_Basics.pde](examples/Myo_1_Basics/Myo_1_Basics.pde)
-- [EMG data](#emg-data) → [Myo_2_EMG_Data.pde](examples/Myo_2_EMG_Data/Myo_2_EMG_Data.pde)
-- [Visual application](#visual-application) → [Myo_3_Application.pde](examples/Myo_3_Application/Myo_3_Application.pde)
-- [Multiple devices](#multiple-devices) → [Myo_4_Multiple.pde](examples/Myo_4_Multiple/Myo_4_Multiple.pde)
+- Application → [Myo_1_Application.pde](examples/Myo_1_Application/Myo_1_Application.pde)
+- [Callbacks of events](#basics) → [Myo_2_Callbacks.pde](examples/Myo_2_Callbacks/Myo_2_Callbacks.pde)
+- EMG data streams → [Myo_3_EMG_Data.pde](examples/Myo_3_EMG_Data/Myo_3_EMG_Data.pde)
+- Multiple devices → [Myo_4_Multiple.pde](examples/Myo_4_Multiple/Myo_4_Multiple.pde)
 
 
-### Basics
+## Basics
 
 ```java
 import de.voidplus.myo.*;
@@ -94,23 +94,23 @@ void draw() {
 // ----------------------------------------------------------
 
 void myoOnPair(Myo myo, long timestamp, String firmware) {
-  println("Sketch: myoOnPair & Device: "+myo.getId());
+  println("Sketch: myoOnPair & Device: " + myo.getId());
 }
 
 void myoOnUnpair(Myo myo, long timestamp) {
-  println("Sketch: myoOnUnpair & Device: "+myo.getId());
+  println("Sketch: myoOnUnpair & Device: " + myo.getId());
 }
 
 void myoOnConnect(Myo myo, long timestamp, String firmware) {
-  println("Sketch: myoOnConnect & Device: "+myo.getId());
+  println("Sketch: myoOnConnect & Device: " + myo.getId());
 }
 
 void myoOnDisconnect(Myo myo, long timestamp) {
-  println("Sketch: myoOnDisconnect & Device: "+myo.getId());
+  println("Sketch: myoOnDisconnect & Device: " + myo.getId());
 }
 
 void myoOnArmSync(Myo myo, long timestamp, Arm arm) {
-  println("Sketch: myoOnArmSync & Device: "+myo.getId());
+  println("Sketch: myoOnArmSync & Device: " + myo.getId());
 
   switch (arm.getType()) {
   case LEFT:
@@ -131,19 +131,19 @@ void myoOnArmSync(Myo myo, long timestamp, Arm arm) {
 }
 
 void myoOnLock(Myo myo, long timestamp){
-  println("Sketch: myoOnLock & Device: "+myo.getId());
+  println("Sketch: myoOnLock & Device: " + myo.getId());
 }
 
 void myoOnUnLock(Myo myo, long timestamp){
-  println("Sketch: myoOnUnLock & Device: "+myo.getId());
+  println("Sketch: myoOnUnLock & Device: " + myo.getId());
 }
 
 void myoOnArmUnsync(Myo myo, long timestamp) {
-  println("Sketch: myoOnArmUnsync & Device: "+myo.getId());
+  println("Sketch: myoOnArmUnsync & Device: " + myo.getId());
 }
 
 void myoOnPose(Myo myo, long timestamp, Pose pose) {
-  println("Sketch: myoOnPose & Device: "+myo.getId());
+  println("Sketch: myoOnPose & Device: " + myo.getId());
   
   switch (pose.getType()) {
   case REST:
@@ -171,19 +171,19 @@ void myoOnPose(Myo myo, long timestamp, Pose pose) {
 }
 
 void myoOnOrientation(Myo myo, long timestamp, PVector orientation) {
-  // println("Sketch: myoOnOrientation & Device: "+myo.getId());
+  // println("Sketch: myoOnOrientation & Device: " + myo.getId());
 }
 
 void myoOnAccelerometer(Myo myo, long timestamp, PVector accelerometer) {
-  // println("Sketch: myoOnAccelerometer & Device: "+myo.getId());
+  // println("Sketch: myoOnAccelerometer & Device: " + myo.getId());
 }
 
 void myoOnGyroscope(Myo myo, long timestamp, PVector gyroscope) {
-  // println("Sketch: myoOnGyroscope & Device: "+myo.getId());
+  // println("Sketch: myoOnGyroscope & Device: " + myo.getId());
 }
 
 void myoOnRssi(Myo myo, long timestamp, int rssi) {
-  println("Sketch: myoOnRssi & Device: "+myo.getId());
+  println("Sketch: myoOnRssi & Device: " + myo.getId());
 }
 
 // ----------------------------------------------------------
@@ -226,65 +226,6 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
     break;
   }
 }
-```
-
-### EMG data
-
-```java
-import de.voidplus.myo.*;
-
-Myo myo;
-
-void setup() {
-  size(800, 500);
-  background(255);
-  // ...
-
-  myo = new Myo(this);
-
-  myo.withEmg();
-  // myo.withoutEmg();
-}
-
-void draw() {
-  background(255);
-  // ...
-}
-
-// ----------------------------------------------------------
-
-void myoOnEmg(Myo myo, long timestamp, int[] data) {
-  println("Sketch: myoOnEmg & Device: "+myo.getId());
-  for(int i = 0; i<data.length; i++){
-    println(data[i]); // [-128 - 127]
-  }
-}
-
-// ----------------------------------------------------------
-
-void myoOn(Myo.Event event, Myo myo, long timestamp) {
-  switch(event) {
-  case EMG:
-    println("Sketch: myoOn EMG & Device: "+myo.getId());
-    int[] data = myo.getEmg();
-    for(int i = 0; i<data.length; i++){
-      println(data[i]); // [-128 - 127]
-    }
-    break;
-  }
-}
-```
-
-
-### Visual application
-```java
-.
-```
-
-
-### Multiple devices
-```java
-.
 ```
 
 
