@@ -58,15 +58,16 @@ Processing version:
 
 ## Examples
 
-- [Basic Data-Access](#basic-data-access) → [e1_basic.pde](examples/e1_basic/e1_basic.pde)
-- [Raw Data-Access (EMG)](#raw-data-access-emg) → [e2_emg_data.pde](examples/e2_emg_data/e2_emg_data.pde)
-- Visual application → [e3_application.pde](examples/e3_application/e3_application.pde)
+- [Basics](#basics) → [Myo_1_Basics.pde](examples/Myo_1_Basics/Myo_1_Basics.pde)
+- [EMG data](#emg-data) → [Myo_2_EMG_Data.pde](examples/Myo_2_EMG_Data/Myo_2_EMG_Data.pde)
+- [Visual application](#visual-application) → [Myo_3_Application.pde](examples/Myo_3_Application/Myo_3_Application.pde)
+- [Multiple devices](#multiple-devices) → [Myo_4_Multiple.pde](examples/Myo_4_Multiple/Myo_4_Multiple.pde)
 
 ## Usage
 
 - Run ```Guides/ Getting Started ...``` of **Myo Connect** to learn the different poses.
 - Install the library to Processing (see [Installation](#installation)).
-- Run the [example](#examples) and **have fun**.
+- Run the [examples](#examples) and **have fun**.
 
 ### Basic Data-Access
 
