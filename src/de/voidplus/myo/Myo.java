@@ -2,6 +2,8 @@ package de.voidplus.myo;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import com.thalmic.myo.DeviceListener;
@@ -149,22 +151,24 @@ public class Myo {
                 System.loadLibrary("myo");
             } catch (UnsatisfiedLinkError linkEx) {
                 try {
-                    String pathOfDepends = new File(
-                            de.voidplus.myo.Myo.class.getProtectionDomain().getCodeSource().getLocation().toURI()
-                    ).getParentFile().toString() + File.separator + "macosx" + File.separator;
-
-                    System.out.println(pathOfDepends);
-
-                    pathOfDepends = "/Users/darius/code/java/workspaces/idea/myo-processing/library/macosx/";
-
-                    System.out.println(pathOfDepends);
-
-                    File dirOfDepends = new File(pathOfDepends);
-                    if (dirOfDepends.exists() && dirOfDepends.isDirectory()) {
-                        System.setProperty("java.library.path", dirOfDepends.getAbsolutePath());
-                        Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
-                        fieldSysPath.setAccessible(true);
-                        fieldSysPath.set(null, null);
+                    String pathOfDepends = null;
+                    URI uri = null;
+                    try {
+                        uri = Myo.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    if (uri != null) {
+                        pathOfDepends = new File(uri).getParentFile().toString() + File.separator + "macosx" + File.separator;
+                    }
+                    if (pathOfDepends != null) {
+                        File dirOfDepends = new File(pathOfDepends);
+                        if (dirOfDepends.exists() && dirOfDepends.isDirectory()) {
+                            System.setProperty("java.library.path", dirOfDepends.getAbsolutePath());
+                            Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+                            fieldSysPath.setAccessible(true);
+                            fieldSysPath.set(null, null);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
