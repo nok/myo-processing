@@ -48,7 +48,7 @@ import processing.core.PVector;
  * Myo for Processing
  *
  * @author Darius Morawiec
- * @version 0.9.0-1
+ * @version 0.9.0.2
  */
 public class Myo {
 
@@ -58,7 +58,7 @@ public class Myo {
     // ================================================================================
 
     private final static String NAME = "Myo for Processing";
-    private final static String VERSION = "0.9.0-1";
+    private final static String VERSION = "0.9.0.2";
     private final static String MYO_SDK_VERSION = "0.9.0";
     private final static String MYO_FIRMWARE_VERSION = "1.5.1970";
     private final static String REPOSITORY = "https://github.com/nok/myo-processing";
