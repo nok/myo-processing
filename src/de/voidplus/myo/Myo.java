@@ -187,8 +187,8 @@ public class Myo {
     }
 
     public boolean hasDevice(int deviceId) {
-        for (int i = 0; i < this.devices.size(); i++) {
-            if (this.devices.get(i).getId() == deviceId) {
+        for (Device device : this.devices) {
+            if (device.getId() == deviceId) {
                 return true;
             }
         }
@@ -213,9 +213,9 @@ public class Myo {
         if (this.devices.isEmpty()) {
             return this.addDevice(myo);
         } else {
-            for (int i = 0; i < this.devices.size(); i++) {
-                if (this.devices.get(i).getMyo() == myo) {
-                    return this.devices.get(i);
+            for (Device device : this.devices) {
+                if (device.getMyo() == myo) {
+                    return device;
                 }
             }
             return this.addDevice(myo);
@@ -252,7 +252,8 @@ public class Myo {
                 );
                 success = true;
             } catch (Exception e) {
-//				e.printStackTrace();
+				e.printStackTrace();
+                PApplet.println(e.getMessage());
             } finally {
                 if (success) {
                     Myo.log("Method: " + methodName + "(...); has been called.", logLevel);
