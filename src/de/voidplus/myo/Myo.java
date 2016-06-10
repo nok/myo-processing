@@ -2,18 +2,10 @@ package de.voidplus.myo;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.FirmwareVersion;
-import com.thalmic.myo.Quaternion;
-import com.thalmic.myo.Vector3;
-import com.thalmic.myo.enums.StreamEmgType;
-import com.thalmic.myo.enums.XDirection;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -161,7 +153,11 @@ public class Myo {
                             de.voidplus.myo.Myo.class.getProtectionDomain().getCodeSource().getLocation().toURI()
                     ).getParentFile().toString() + File.separator + "macosx" + File.separator;
 
+                    System.out.println(pathOfDepends);
+
                     pathOfDepends = "/Users/darius/code/java/workspaces/idea/myo-processing/library/macosx/";
+
+                    System.out.println(pathOfDepends);
 
                     File dirOfDepends = new File(pathOfDepends);
                     if (dirOfDepends.exists() && dirOfDepends.isDirectory()) {
@@ -252,8 +248,8 @@ public class Myo {
                 );
                 success = true;
             } catch (Exception e) {
-				e.printStackTrace();
-                PApplet.println(e.getMessage());
+//				e.printStackTrace();
+//              PApplet.println(e.getMessage());
             } finally {
                 if (success) {
                     Myo.log("Method: " + methodName + "(...); has been called.", logLevel);
