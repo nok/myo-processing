@@ -37,13 +37,6 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 Unzip and put the extracted *MyoForProcessing* folder into the libraries directory of your Processing sketches. The References and examples are stored in the *MyoForProcessing* directory. For more help read the [tutorial](http://www.learningprocessing.com/tutorials/libraries/) by [Daniel Shiffman](https://github.com/shiffman).
 
 
-## Usage
-
-- Run ```Guides/ Getting Started ...``` of **Myo Connect** to learn the different poses.
-- Install the library to Processing (see the [installation instructions](#installation)).
-- Run the [examples](#examples) and **have fun**.
-
-
 ## Dependencies
 
 - [Myo Connect v0.9.0](https://developer.thalmic.com/downloads)
@@ -63,7 +56,8 @@ Myo SDK version:
 
 Processing version:
 
-- **3.0.2**
+- **3.1.1**
+- 3.0.2
 - 3.0a4
 
 
@@ -75,7 +69,7 @@ Processing version:
 - [Multiple devices](#multiple-devices) → [Myo_4_Multiple.pde](examples/Myo_4_Multiple/Myo_4_Multiple.pde)
 
 
-### Basic Data-Access
+### Basics
 
 ```java
 import de.voidplus.myo.*;
@@ -234,7 +228,7 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
 }
 ```
 
-### Raw Data-Access (EMG)
+### EMG data
 
 ```java
 import de.voidplus.myo.*;
@@ -279,6 +273,18 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
     break;
   }
 }
+```
+
+
+### Visual application
+```java
+.
+```
+
+
+### Multiple devices
+```java
+.
 ```
 
 
