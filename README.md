@@ -1,4 +1,10 @@
-# Myo for Processing
+[![Join the chat at https://gitter.im/nok/myo-processing](https://badges.gitter.im/nok/myo-processing.svg)](https://gitter.im/nok/myo-processing?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+---
+
+![Myo for Processing](reference/github_cover.png)
+
+===
 
 Library to use the [Myo](https://www.thalmic.com) in [Processing](http://processing.org/).
 
@@ -278,7 +284,7 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
 
 ## Questions?
 
-Don't be shy and feel free to contact me on [Twitter](https://twitter.com/darius_morawiec).
+Don't be shy and feel free to contact me on [Twitter](https://twitter.com/darius_morawiec) or [Gitter](https://gitter.im/nok/myo-processing).
 
 
 ## License
