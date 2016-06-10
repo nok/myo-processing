@@ -25,12 +25,17 @@ The [Myo](https://www.thalmic.com) armband lets you use the electrical activity 
 
 - [Myo for Processing v0.9.0-1](download/MyoForProcessing.zip?raw=true)
 
-Note: If you are interested in the newest **development** implementation, so have a look at the [dev branch](https://github.com/nok/myo-processing/tree/dev).
-
 
 ## Installation
 
-Unzip and put the extracted *MyoForProcessing* folder into the libraries folder of your Processing sketches. Reference and examples are included in the *MyoForProcessing* folder. For more help read the [tutorial](http://www.learningprocessing.com/tutorials/libraries/) by [Daniel Shiffman](https://github.com/shiffman).
+Unzip and put the extracted *MyoForProcessing* folder into the libraries directory of your Processing sketches. The References and examples are stored in the *MyoForProcessing* directory. For more help read the [tutorial](http://www.learningprocessing.com/tutorials/libraries/) by [Daniel Shiffman](https://github.com/shiffman).
+
+
+## Usage
+
+- Run ```Guides/ Getting Started ...``` of **Myo Connect** to learn the different poses.
+- Install the library to Processing (see the [installation instructions](#installation)).
+- Run the [examples](#examples) and **have fun**.
 
 
 ## Dependencies
@@ -63,11 +68,6 @@ Processing version:
 - [Visual application](#visual-application) → [Myo_3_Application.pde](examples/Myo_3_Application/Myo_3_Application.pde)
 - [Multiple devices](#multiple-devices) → [Myo_4_Multiple.pde](examples/Myo_4_Multiple/Myo_4_Multiple.pde)
 
-## Usage
-
-- Run ```Guides/ Getting Started ...``` of **Myo Connect** to learn the different poses.
-- Install the library to Processing (see [Installation](#installation)).
-- Run the [examples](#examples) and **have fun**.
 
 ### Basic Data-Access
 
@@ -278,9 +278,9 @@ void myoOn(Myo.Event event, Myo myo, long timestamp) {
 
 ## Questions?
 
-Don't be shy and feel free to contact me on Twitter: [@darius_morawiec](https://twitter.com/darius_morawiec)
+Don't be shy and feel free to contact me on [Twitter](https://twitter.com/darius_morawiec).
 
 
 ## License
 
-The library is Open Source Software released under the [License](LICENSE).
+The library is Open Source Software released under the [license](LICENSE).
