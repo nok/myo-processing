@@ -6,7 +6,7 @@
 
 ===
 
-Library to use the [Myo](https://www.thalmic.com) in [Processing](http://processing.org/).
+Contributed library to use the [Myo](https://www.thalmic.com) in [Processing](http://processing.org/).
 
 
 ## Table of Contents
@@ -67,6 +67,10 @@ Processing version:
 - [Callbacks of events](#basics) → [Myo_2_Callbacks.pde](examples/Myo_2_Callbacks/Myo_2_Callbacks.pde)
 - EMG data streams → [Myo_3_EMG_Data.pde](examples/Myo_3_EMG_Data/Myo_3_EMG_Data.pde)
 - Multiple devices → [Myo_4_Multiple.pde](examples/Myo_4_Multiple/Myo_4_Multiple.pde)
+
+Here you see a screenshot of the viewable example [Myo_1_Application.pde](examples/Myo_1_Application/Myo_1_Application.pde):
+
+![Application](reference/example_application.png)
 
 
 ## Basics
