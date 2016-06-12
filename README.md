@@ -304,24 +304,24 @@ myo.setVerboseLevel(2);    // Levels: [1, 2, 3]
 // myo.setVerbose(false);  // Disable logging 
 ```
 
-Method | Level
-- | :-:
-myoOnPair | 1
-myoOnUnpair | 1
-myoOnConnect | 1
-myoOnDisconnect | 1
-myoOnWarmupCompleted | 1
-myoOnArmSync | 1
-myoOnArmUnsync | 1
-myoOnPose | 2
-myoOnLock | 2
-myoOnUnlock | 2
-myoOnRssi | 2
-myoOnBatteryLevel | 2
-myoOnOrientationData | 3
-myoOnAccelerometerData | 3
-myoOnGyroscopeData | 3
-myoOnEmgData | 3
+| Method                    | Level     |
+| ------------------------- | :-------: |
+| myoOnPair                 | 1         |
+| myoOnUnpair               | 1         |
+| myoOnConnect              | 1         |
+| myoOnDisconnect           | 1         |
+| myoOnWarmupCompleted      | 1         |
+| myoOnArmSync              | 1         |
+| myoOnArmUnsync            | 1         |
+| myoOnPose                 | 2         |
+| myoOnLock                 | 2         |
+| myoOnUnlock               | 2         |
+| myoOnRssi                 | 2         |
+| myoOnBatteryLevel         | 2         |
+| myoOnOrientationData      | 3         |
+| myoOnAccelerometerData    | 3         |
+| myoOnGyroscopeData        | 3         |
+| myoOnEmgData              | 3         |
 
 ## Questions?
 
