@@ -1,6 +1,8 @@
 package de.voidplus.myo;
 
+
 public class Arm {
+
 
     protected Type type;
 
@@ -18,15 +20,6 @@ public class Arm {
     }
 
     /**
-     * Arm recognized?
-     *
-     * @return
-     */
-    protected boolean hasArm() {
-        return this.getType() != Type.UNKNOWN;
-    }
-
-    /**
      * Left arm?
      *
      * @return
@@ -37,9 +30,8 @@ public class Arm {
                 return true;
             case RIGHT:
                 return false;
-            default:
-                return null;
         }
+        return false;
     }
 
     /**

@@ -12,7 +12,7 @@ void setup() {
 
   myo = new Myo(this);
   // myo.setVerbose(true);
-  // myo.setVerboseLevel(4); // Default: 1 (1-4)
+  // myo.setVerboseLevel(2); // Default: 1 (1-3)
   
   myo.setFrequency(10);
   
@@ -37,7 +37,7 @@ void draw() {
   background(255);
   // ...
 
-  for(int i = 0; i<5; i++){
+  for (int i = 0; i<5; i++) {
     tint(255, (active[i]) ? 100 : 50);
     image(img[i], ((140*i)+(i*10))+30, 30, 140, 140);
   }
@@ -45,7 +45,7 @@ void draw() {
 
 void myoOnPose(Device myo, long timestamp, Pose pose) {
   
-  if(!pose.getType().toString().equals("REST")){
+  if (!pose.getType().toString().equals("REST")) {
     resetImages();
   }
   
@@ -74,10 +74,10 @@ void myoOnPose(Device myo, long timestamp, Pose pose) {
   }
 }
 
-void myoOnLock(Device myo, long timestamp){
+void myoOnLock(Device myo, long timestamp) {
   resetImages();
 }
 
-void myoOnUnLock(Device myo, long timestamp){
+void myoOnUnLock(Device myo, long timestamp) {
   resetImages();
 }

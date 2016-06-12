@@ -1,5 +1,6 @@
 package de.voidplus.myo;
 
+
 import com.thalmic.myo.FirmwareVersion;
 import com.thalmic.myo.enums.StreamEmgType;
 import de.voidplus.myo.Myo.Unlock;
@@ -27,29 +28,41 @@ public class Device {
     // 1 Properties
     //=================================================================================
 
-    protected com.thalmic.myo.Myo myo;
-    protected Integer id;
+    protected com.thalmic.myo.Myo _myo;
+    protected int id;
+
     protected Arm arm;
     protected Pose pose;
     protected String firmware;
     protected PVector orientation, accelerometer, gyroscope;
     protected int rssi;
     protected boolean withEmg;
-    protected int[] emgData;
+    protected int[] emg;
+    protected int batteryLevel;
 
 
     //=================================================================================
     // 2 Constructors
     //=================================================================================
 
-    public Device(com.thalmic.myo.Myo myo, int id) {
-        this.myo = myo;
+    public Device(com.thalmic.myo.Myo _myo, int id) {
+        this._myo = _myo;
+        this.id = id;
+        this.firmware = "";
+
+        this.rssi = 0;
+        this.requestRssi();
+
+        this.batteryLevel = 0;
+        this.requestBatteryLevel();
+
         this.arm = new Arm();
         this.pose = new Pose();
+
         this.orientation = new PVector();
         this.accelerometer = new PVector();
         this.gyroscope = new PVector();
-        this.id = id;
+        this.withEmg = false;
     }
 
     //================================================================================
@@ -66,13 +79,13 @@ public class Device {
         switch (level) {
             case 1:
                 de.voidplus.myo.Myo.log("Vibrating short ...");
-                this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_SHORT);
+                this._myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_SHORT);
             case 2:
                 de.voidplus.myo.Myo.log("Vibrating medium ...");
-                this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_MEDIUM);
+                this._myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_MEDIUM);
             case 3:
                 de.voidplus.myo.Myo.log("Vibrating long ...");
-                this.myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_LONG);
+                this._myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_LONG);
         }
         return this;
     }
@@ -92,7 +105,12 @@ public class Device {
      * @return
      */
     public Device requestRssi() {
-        this.myo.requestRssi();
+        this._myo.requestRssi();
+        return this;
+    }
+
+    public Device requestBatteryLevel() {
+        this._myo.requestBatteryLevel();
         return this;
     }
 
@@ -102,7 +120,7 @@ public class Device {
      * @return
      */
     public Device lock() {
-        this.myo.lock();
+        this._myo.lock();
         return this;
     }
 
@@ -115,11 +133,11 @@ public class Device {
     public Device unlock(Unlock mode) {
         switch (mode) {
             case HOLD:
-                this.myo.unlock(com.thalmic.myo.enums.UnlockType.UNLOCK_HOLD);
+                this._myo.unlock(com.thalmic.myo.enums.UnlockType.UNLOCK_HOLD);
                 break;
             case TIMED:
             default:
-                this.myo.unlock(com.thalmic.myo.enums.UnlockType.UNLOCK_TIMED);
+                this._myo.unlock(com.thalmic.myo.enums.UnlockType.UNLOCK_TIMED);
                 break;
         }
         return this;
@@ -137,8 +155,8 @@ public class Device {
      */
     protected Device withEmg() {
         this.withEmg = true;
-        this.emgData = new int[8];
-        this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_ENABLED);
+        this.emg = new int[8];
+        this._myo.setStreamEmg(StreamEmgType.STREAM_EMG_ENABLED);
         return this;
     }
 
@@ -149,7 +167,7 @@ public class Device {
      */
     protected Device withoutEmg() {
         this.withEmg = false;
-        this.myo.setStreamEmg(StreamEmgType.STREAM_EMG_DISABLED);
+        this._myo.setStreamEmg(StreamEmgType.STREAM_EMG_DISABLED);
         return this;
     }
 
@@ -178,7 +196,7 @@ public class Device {
     // 5.1 Raw or original objects
 
     public com.thalmic.myo.Myo getMyo() {
-        return this.myo;
+        return this._myo;
     }
 
     //--------------------------------------------------------------------------------
@@ -205,14 +223,12 @@ public class Device {
         return this.firmware;
     }
 
-    /**
-     * Set ID of device.
-     *
-     * @param deviceId
-     * @return
-     */
-    protected Integer setId(int deviceId) {
-        return this.id = deviceId;
+    public int getRssi() {
+        return this.rssi;
+    }
+
+    public int getBatteryLevel() {
+        return this.batteryLevel;
     }
 
     //--------------------------------------------------------------------------------
@@ -226,8 +242,8 @@ public class Device {
      *
      * @return Name of latest pose.
      */
-    public String getPose() {
-        return this.pose.getType().toString().toUpperCase();
+    public Pose getPose() {
+        return this.pose;
     }
 
     //----------------------------------------
@@ -238,8 +254,8 @@ public class Device {
      *
      * @return Type of recognized arm.
      */
-    public String getArm() {
-        return this.arm.getType().toString().toUpperCase();
+    public Arm getArm() {
+        return this.arm;
     }
 
     /**
@@ -248,7 +264,7 @@ public class Device {
      * @return
      */
     public boolean hasArm() {
-        return this.arm.hasArm();
+        return this.arm.type != Arm.Type.UNKNOWN;
     }
 
     /**
@@ -306,7 +322,7 @@ public class Device {
      * @return
      */
     public int[] getEmg() {
-        return this.emgData;
+        return this.emg;
     }
 
 }

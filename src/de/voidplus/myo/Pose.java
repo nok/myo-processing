@@ -1,6 +1,8 @@
 package de.voidplus.myo;
 
+
 public class Pose {
+
 
     protected Type type;
 
