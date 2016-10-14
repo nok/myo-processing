@@ -80,12 +80,15 @@ public class Device {
             case 1:
                 de.voidplus.myo.Myo.log("Vibrating short ...");
                 this._myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_SHORT);
+                break;
             case 2:
                 de.voidplus.myo.Myo.log("Vibrating medium ...");
                 this._myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_MEDIUM);
+                break;
             case 3:
                 de.voidplus.myo.Myo.log("Vibrating long ...");
                 this._myo.vibrate(com.thalmic.myo.enums.VibrationType.VIBRATION_LONG);
+                break;
         }
         return this;
     }
